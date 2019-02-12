@@ -19,11 +19,10 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
-  google_sign_in: ^4.0.1
-  #flutter_facebook_login: ^1.2.0
+  firebase_auth: ^0.8.1
   progress_dialog: ^1.0.2
   app_intro: ^1.0.1
-
+  google_sign_in: ^4.0.1
 
 
 
@@ -46,8 +45,8 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/first_screen.png
-    - assets/google-plus.png
-    - assets/facebook .png
+    - assets/google_plus.png
+    - assets/facebook.png
     - assets/female_gender.png
     - assets/loader.gif
 

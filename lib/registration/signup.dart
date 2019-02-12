@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:study_dote/registration/login.dart';
+import 'package:study_dote/common/gradient_button.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+
+final FirebaseAuth _auth = FirebaseAuth.instance;
+final GoogleSignIn _googleSignIn = GoogleSignIn();
 
 class SignUp extends StatefulWidget {
   @override
@@ -14,7 +20,7 @@ final Shader linearGradient = LinearGradient(
 
 class _SignUpState extends State<SignUp> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  String _userName;
+  String _email;
   String _password;
   bool _acceptterms = false;
 
@@ -65,7 +71,7 @@ class _SignUpState extends State<SignUp> {
                     },
                     onSaved: (String value) {
                       setState(() {
-                        _userName = value;
+                        _email = value;
                       });
                     },
                     textCapitalization: TextCapitalization.none,
@@ -103,8 +109,8 @@ class _SignUpState extends State<SignUp> {
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(
                               Radius.circular(_size.width * 0.025))),
-                      hintText: 'Email ID ',
-                      labelText: 'Email ID',
+                      hintText: 'ex@email.com',
+                      labelText: 'Email',
                     ),
                   ),
                 ),
@@ -184,7 +190,7 @@ class _SignUpState extends State<SignUp> {
                         if (_formKey.currentState.validate()) {
                           _formKey.currentState.save();
                           print(
-                              '$_acceptterms,usr:$_userName,pass:$_password');
+                              '$_acceptterms,usr:$_email,pass:$_password');
                           FocusScope.of(context)
                               .requestFocus(FocusNode());
                         }
@@ -210,6 +216,45 @@ class BottomFacebookGoogle extends StatelessWidget {
     Key key,
   }) : super(key: key);
 
+  //Google Login
+  Future<String> _testSignInWithGoogle() async {
+    final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
+    final GoogleSignInAuthentication googleAuth =
+    await googleUser.authentication;
+    final AuthCredential credential = GoogleAuthProvider.getCredential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+    final FirebaseUser user = await _auth.signInWithCredential(credential);
+    assert(user.email != null);
+    assert(user.displayName != null);
+    assert(!user.isAnonymous);
+    assert(await user.getIdToken() != null);
+
+    final FirebaseUser currentUser = await _auth.currentUser();
+    assert(user.uid == currentUser.uid);
+    print(' signInWithGoogle succeeded : ' + user.uid + " " + user.email + " " + user.displayName + " " + "  " + user.photoUrl + " " );
+    return 'signInWithGoogle succeeded: $user';
+  }
+
+  Widget _getSignUPLabel(){
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        SizedBox(
+          height: 70.0,
+        ),
+        Text(
+          'Signup With',
+          style: TextStyle(
+            fontSize: 20.0,
+            color: Colors.black,
+          ),
+        )
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -218,26 +263,7 @@ class BottomFacebookGoogle extends StatelessWidget {
       color: Colors.grey.withOpacity(0.3),
       child: Column(
         children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-//                    mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              SizedBox(
-                height: 70.0,
-              ),
-              Text(
-                'Signup With',
-                style: TextStyle(
-                  fontSize: 20.0,
-                  color: Colors.black,
-//                          foreground: Paint()..shader = linearGradient,
-                ),
-              )
-            ],
-          ),
-//                  SizedBox(
-//                    height: 30.0,
-//                  ),
+          _getSignUPLabel(),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
@@ -248,7 +274,7 @@ class BottomFacebookGoogle extends StatelessWidget {
                 ),
                 child: RaisedButton.icon(
                   onPressed: () {},
-                  icon: Image(image: AssetImage('assets/facebook .png')),
+                  icon: Image(image: AssetImage('assets/facebook.png')),
                   label: Text(
                     'Facebook',
                     style: TextStyle(
@@ -265,8 +291,10 @@ class BottomFacebookGoogle extends StatelessWidget {
               Container(
                 height: 50.0,
                 child: RaisedButton.icon(
-                  onPressed: () {},
-                  icon: Image(image: AssetImage('assets/google-plus.png')),
+                  onPressed: () {
+                    _testSignInWithGoogle();
+                  },
+                  icon: Image(image: AssetImage('assets/google_plus.png')),
                   label: Text(
                     'Google+',
                     style: TextStyle(
@@ -286,17 +314,15 @@ class BottomFacebookGoogle extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Text('Don\'t have an account?  '),
+                Text('Already have an account?  '),
                 InkWell(
                   onTap: (){
-//                            Navigator.of(context).pop();
                     Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context)=>Login()));
                   },
                   child: Text(
                     'Login',
                     style: TextStyle(
                       fontSize: 15.0,
-//                        color: Colors.black,
                       foreground: Paint()..shader = linearGradient,
                     ),
                   ),
@@ -310,44 +336,3 @@ class BottomFacebookGoogle extends StatelessWidget {
   }
 }
 
-class GradientButton extends StatelessWidget {
-  const GradientButton(
-      {Key key,
-      @required this.onPressed,
-      @required this.title,
-      @required this.width,
-      @required this.height})
-      : super(key: key);
-
-  final Function onPressed;
-  final String title;
-  final double width;
-  final double height;
-
-  @override
-  Widget build(BuildContext context) {
-    return RawMaterialButton(
-      splashColor: Colors.lightBlue.withOpacity(0.5),
-      onPressed: onPressed,
-      child: Container(
-        child: Center(
-            child: Text(
-          title,
-          style: TextStyle(fontSize: 20.0, color: Colors.white),
-        )),
-        width: width,
-        height: height,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(30.0),
-          shape: BoxShape.rectangle,
-          gradient: new LinearGradient(
-            colors: [
-              Color.fromRGBO(57, 160, 205, 1),
-              Color.fromRGBO(5, 193, 154, 1)
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
