@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "38635120480",
+    "firebase_url": "https://studydote-68214.firebaseio.com",
+    "project_id": "studydote-68214",
+    "storage_bucket": "studydote-68214.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:38635120480:android:10580b10c9a982ce",
+        "android_client_info": {
+          "package_name": "studydote.studydote"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "38635120480-8u39vdds2cukt36pla60ci1jebg47eqh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD4hKOozjn7HCSMGyIu1QG_Aeo4BnV1xpE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
