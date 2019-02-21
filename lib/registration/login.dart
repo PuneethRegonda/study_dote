@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:study_dote/home.dart';
 import 'package:study_dote/registration/signup.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:study_dote/common/gradient_button.dart';

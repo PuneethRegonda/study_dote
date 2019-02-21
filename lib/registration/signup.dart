@@ -7,7 +7,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:study_dote/common/progress_dialog.dart';
 import 'package:study_dote/utils/Urls.dart';
-import 'package:study_dote/utils/api_requests.dart';
 import 'package:study_dote/utils/my_prefs.dart';
 import 'package:http/http.dart';
 import 'dart:convert';

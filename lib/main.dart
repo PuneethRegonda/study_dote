@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:study_dote/flash_cards/flash_main.dart';
-
-import 'package:study_dote/registration/first_screen.dart';
+import 'package:study_dote/home.dart';
 import 'package:study_dote/scoped_model/scopedmodel.dart';
 
 import 'package:scoped_model/scoped_model.dart';
@@ -16,7 +14,7 @@ void main(){
        child: MaterialApp(
          ///change only myapp() part
          ///everything should be the same
-           home: MyApp(),
+           home: Home(),
        ),
      ),
     )
