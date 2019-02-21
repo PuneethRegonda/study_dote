@@ -149,7 +149,7 @@ class _SignUpState extends State<SignUp> {
                             });
                           },
                           keyboardType: TextInputType.text,
-                          obscureText: true,
+                          obscureText: !model.passwordstatus,
                           decoration: InputDecoration(
                             prefixIcon: Icon(Icons.lock),
                             suffixIcon: IconButton(

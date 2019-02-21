@@ -106,7 +106,7 @@ class _LoginState extends State<Login> {
                                 _password = value;
                               });
                             },
-                            obscureText: true,
+                            obscureText: !model.passwordstatus,
                             decoration: InputDecoration(
                               prefixIcon: Icon(Icons.lock),
                               suffixIcon: IconButton(
