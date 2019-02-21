@@ -83,10 +83,11 @@ class BodyLayOut extends StatelessWidget {
         ),
         SizedBox(height: 10.0,),
         SizedBox(
+          width: width*8/10,
           child: Text("Most trusted platform for MD/MS entrance examination",
             textAlign: TextAlign.center,
             style: TextStyle(
-                fontSize: height * 0.25 / 10),),
+                fontSize: height * 0.22 / 10),),
         ),
         Expanded(
           child: SizedBox(),
