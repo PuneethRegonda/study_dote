@@ -238,7 +238,8 @@ class _SignUpState extends State<SignUp> {
         //if (progressDialog.isShowing())
           progressDialog.hide();
         return;
-      }else if(result['id']!=null) {
+      }
+      else if(result['id']!=null) {
         print('Id: ${result['id']}\n');
         MyPrefs.setLoginDetails('${result['id']}', '${result['password']}', '${result['email']}').whenComplete((){
           //if(progressDialog.isShowing())
@@ -247,9 +248,10 @@ class _SignUpState extends State<SignUp> {
               builder: (BuildContext context) => Home()));
         });
         return;
-      }else {
+      }
+      else {
         print('Error! Please try later');
-        //if (progressDialog.isShowing())
+        if (progressDialog.isShowing())
           progressDialog.hide();
         return;
       }
