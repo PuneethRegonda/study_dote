@@ -5,7 +5,7 @@ import 'package:study_dote/registration/login.dart';
 import 'package:study_dote/common/gradient_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:progress_dialog/progress_dialog.dart';
+import 'package:study_dote/common/progress_dialog.dart';
 import 'package:study_dote/utils/Urls.dart';
 import 'package:study_dote/utils/api_requests.dart';
 import 'package:study_dote/utils/my_prefs.dart';
