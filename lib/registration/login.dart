@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:study_dote/registration/signup.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:study_dote/common/gradient_button.dart';
+import 'package:study_dote/scoped_model/scopedmodel.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -16,8 +18,7 @@ final Shader linearGradient = LinearGradient(
 
 class _LoginState extends State<Login> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  String _email= '', _password='';
-  bool _acceptterms = false;
+  String _email = '', _password = '';
   Size _size;
 
   @override
@@ -32,101 +33,112 @@ class _LoginState extends State<Login> {
   }
 
   Widget _getLoginForm() {
-    return Form(
-      key: _formKey,
-      child: Scaffold(
-        bottomNavigationBar: BottomFacebookGoogle(),
-        backgroundColor: Colors.white,
-        body: ListView(children: [
-          Container(
-            margin: EdgeInsets.fromLTRB(_size.width * 0.05, _size.width * 0.05,
-                _size.width * 0.05, _size.width * 0.01),
-            child: Column(
-              children: <Widget>[
-                Container(
-                  padding: EdgeInsets.fromLTRB(
-                      _size.width * 0.03,
-                      _size.height * 0.1,
-                      _size.width * 0.03,
-                      _size.height * 0.1),
-                  child: Center(
-                    child: Text(
-                      'Login',
-                      style: new TextStyle(
-                          fontSize: _size.width * 0.08,
-                          fontWeight: FontWeight.bold,
-                          foreground: Paint()..shader = linearGradient),
-                    ),
-                  ),
-                ),
-                Column(
+    return ScopedModelDescendant(
+      builder: (BuildContext context, Widget child, FlipScoppedModel model) {
+        return Form(
+          key: _formKey,
+          child: Scaffold(
+            bottomNavigationBar: BottomFacebookGoogle(),
+            backgroundColor: Colors.white,
+            body: ListView(children: [
+              Container(
+                margin: EdgeInsets.fromLTRB(_size.width * 0.05,
+                    _size.width * 0.05, _size.width * 0.05, _size.width * 0.01),
+                child: Column(
                   children: <Widget>[
                     Container(
-                      width: _size.width * 0.8,
-                      child: TextFormField(
-                        validator: (String value) {
-                          if (value.contains('@'))
-                            return null;
-                          else
-                            return 'Invalid E-mail address';
-                        },
-                        onSaved: (String value) {
-                          setState(() {
-                            _email = value;
-                          });
-                        },
-                        keyboardType: TextInputType.emailAddress,
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.person),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(
-                                  Radius.circular(_size.width * 0.025))),
-                          hintText: 'Email',
-                          labelText: 'ex@email.com',
+                      padding: EdgeInsets.fromLTRB(
+                          _size.width * 0.03,
+                          _size.height * 0.1,
+                          _size.width * 0.03,
+                          _size.height * 0.1),
+                      child: Center(
+                        child: Text(
+                          'Login',
+                          style: new TextStyle(
+                              fontSize: _size.width * 0.08,
+                              fontWeight: FontWeight.bold,
+                              foreground: Paint()..shader = linearGradient),
                         ),
                       ),
                     ),
-                    SizedBox(
-                      height: _size.width * 0.03,
-                    ),
-                    Container(
-                      width: _size.width * 0.8,
-                      child: TextFormField(
-                        validator: (String pass) {
-                          if (pass.length > 6)
-                            return null;
-                          else
-                            return 'Password must be 6 characters long';
-                        },
-                        onSaved: (String value) {
-                          setState(() {
-                            _password = value;
-                          });
-                        },
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.lock),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(
-                                  Radius.circular(_size.width * 0.025))),
-                          hintText: 'Password',
-                          labelText: 'Password',
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: _size.width * 0.1,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                    Column(
                       children: <Widget>[
-                        GradientButton(
-                          onPressed: () {
+                        Container(
+                          width: _size.width * 0.8,
+                          child: TextFormField(
+                            validator: (String value) {
+                              if (value.contains('@'))
+                                return null;
+                              else
+                                return 'Invalid E-mail address';
+                            },
+                            onSaved: (String value) {
+                              setState(() {
+                                _email = value;
+                              });
+                            },
+                            keyboardType: TextInputType.emailAddress,
+                            decoration: InputDecoration(
+                              prefixIcon: Icon(Icons.person),
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.all(
+                                      Radius.circular(_size.width * 0.025))),
+                              hintText: 'Email',
+                              labelText: 'ex@email.com',
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: _size.width * 0.03,
+                        ),
+                        Container(
+                          width: _size.width * 0.8,
+                          child: TextFormField(
+                            validator: (String pass) {
+                              if (pass.length > 6)
+                                return null;
+                              else
+                                return 'Password must be 6 characters long';
+                            },
+                            onSaved: (String value) {
+                              setState(() {
+                                _password = value;
+                              });
+                            },
+                            obscureText: true,
+                            decoration: InputDecoration(
+                              prefixIcon: Icon(Icons.lock),
+                              suffixIcon: IconButton(
+                                  icon: model.passwordstatus
+                                      ? Icon(Icons.visibility)
+                                      : Icon(Icons.visibility_off),
+                                  onPressed: () {
+                                    return model.ispasswordstatus();
+                                  }),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(
+                                    Radius.circular(_size.width * 0.025)),
+                              ),
+                              hintText: 'Password',
+                              labelText: 'Password',
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: _size.width * 0.1,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            GradientButton(
+                              onPressed: () {
 //                            print(_size.height * 0.078);
-                            if(_formKey.currentState.validate()) {
-                              FocusScope.of(context).requestFocus(FocusNode());
-                              _formKey.currentState.save();
-                              _makeLoginRequest();
+                                if (_formKey.currentState.validate()) {
+                                  FocusScope.of(context)
+                                      .requestFocus(FocusNode());
+                                  _formKey.currentState.save();
+                                  _makeLoginRequest();
 //                                if(value)
 //                                  Navigator.of(context).pushReplacement(
 //                                      CupertinoPageRoute(
@@ -134,26 +146,28 @@ class _LoginState extends State<Login> {
 //                                else
 //                                  print('error');
 
-                            }
-                          },
-                          title: 'Login',
-                          width: _size.width * 0.8,
-                          height: 54.0,
+                                }
+                              },
+                              title: 'Login',
+                              width: _size.width * 0.8,
+                              height: 54.0,
+                            ),
+                          ],
                         ),
                       ],
                     ),
                   ],
                 ),
-              ],
-            ),
 //              color: Colors.blue,
+              ),
+            ]),
           ),
-        ]),
-      ),
+        );
+      },
     );
   }
 
-  Future _makeLoginRequest(){
+  Future _makeLoginRequest() {
     print('$_email' + '$_password');
     //return true;
   }
@@ -244,7 +258,6 @@ class BottomFacebookGoogle extends StatelessWidget {
                 Text('Don\'t have an account?  '),
                 InkWell(
                   onTap: () {
-                    Navigator.of(context).pop();
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (BuildContext context) => SignUp()));
                   },

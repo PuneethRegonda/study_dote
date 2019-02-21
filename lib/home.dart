@@ -32,7 +32,7 @@ class Home extends StatelessWidget {
           ],
         ),
       ),
-      
+
       body: Container(
         child: ListView(
           scrollDirection: Axis.vertical,

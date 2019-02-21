@@ -8,7 +8,12 @@ class FlipScoppedModel extends Model{
   final int speed = 500;
   bool isFront=true;
   bool pointerState = false;
+  bool passwordstatus = false;
 
+  void ispasswordstatus(){
+    passwordstatus=!passwordstatus;
+    notifyListeners();
+  }
 
   toggleCard() {
     if (isFront) {
