@@ -30,7 +30,7 @@ class Home extends StatelessWidget {
               title: Text('Flash Cards'),
               onTap: () {
                 Navigator.of(context).push(CupertinoPageRoute(
-                    builder: (BuildContext context) => MyApp()));
+                    builder: (BuildContext context) => FlashCardMain()));
               },
             )
           ],

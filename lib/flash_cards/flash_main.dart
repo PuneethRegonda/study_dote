@@ -4,7 +4,7 @@ import 'package:study_dote/scoped_model/scopedmodel.dart';
 import 'swipe_feed_page.dart';
 import 'dart:math';
 
-class MyApp extends StatelessWidget {
+class FlashCardMain extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
