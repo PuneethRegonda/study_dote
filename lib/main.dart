@@ -15,7 +15,7 @@ void main(){
        child: MaterialApp(
          ///change only myapp() part
          ///everything should be the same
-           home: SignUp(),
+           home: Home(),
        ),
      ),
     )

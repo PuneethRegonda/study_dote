@@ -2,6 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:study_dote/flash_cards/flash_main.dart';
 
+final Shader linearGradient = LinearGradient(
+  colors: [Color.fromRGBO(57, 160, 205, 1), Color.fromRGBO(5, 193, 154, 1)],
+).createShader(Rect.fromLTWH(0.0, 0.0, 300.0, 70.0));
+
 class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -42,7 +46,7 @@ class Home extends StatelessWidget {
               child: new Noticeboard(),
             ),
            Container(
-             color: Colors.blue.withOpacity(0.06),
+             color: Colors.white,
              padding: EdgeInsets.all(10.0),
              child: Row(
                mainAxisSize: MainAxisSize.max,
@@ -53,7 +57,28 @@ class Home extends StatelessWidget {
                      child: Container(
                        width: 110.0,
                        height: 80.0,
-                       color: Color.fromRGBO(244, 245, 249, 1),
+                       child: Column(
+                         children: <Widget>[
+                           Padding(
+                             padding: const EdgeInsets.all(8.0),
+                             child: Container(
+                               width: 50.0,
+                               height: 40.0,
+                               decoration: BoxDecoration(
+                                   image: DecorationImage(image: AssetImage('assets/menu_icons/dailycapsule.png'),
+                                     fit: BoxFit.scaleDown,
+                                   )
+                               ),
+                             ),
+                           ),
+                           Wrap(children: <Widget>[
+                             Text('Daliy Capsule',textAlign: TextAlign.end,
+                             style: TextStyle(
+                               letterSpacing: 0.7,
+                               fontSize: 15.0,
+                             ),)])
+                         ],
+                       ),
 //                  child: ,
                      )),
                  ClipRRect(
@@ -61,22 +86,63 @@ class Home extends StatelessWidget {
                      child: Container(
                        width: 110.0,
                        height: 80.0,
-                       color: Color.fromRGBO(244, 245, 249, 1),
-//                  child: ,
+                       child: Column(
+                         children: <Widget>[
+                           Padding(
+                             padding: const EdgeInsets.all(8.0),
+                             child: Container(
+                               width: 50.0,
+                               height: 40.0,
+                               decoration: BoxDecoration(
+                                   image: DecorationImage(
+                                     image: AssetImage('assets/menu_icons/flash.png'),
+                                     fit: BoxFit.scaleDown,
+                                   )
+                               ),
+                             ),
+                           ),
+                           Wrap(children: <Widget>[
+                             Text('Flash Cards',textAlign: TextAlign.end,
+                               style: TextStyle(
+                                 letterSpacing: 0.7,
+                                 fontSize: 15.0,
+                               ),)])
+                         ],
+                       ),
                      )),
                  ClipRRect(
                      borderRadius: BorderRadius.circular(10.0),
                      child: Container(
                        width: 110.0,
                        height: 80.0,
-                       color: Color.fromRGBO(244, 245, 249, 1),
-//                  child: ,
+                       child: Column(
+                         children: <Widget>[
+                           Padding(
+                             padding: const EdgeInsets.all(8.0),
+                             child: Container(
+                               width: 50.0,
+                               height: 40.0,
+                               decoration: BoxDecoration(
+                                   image: DecorationImage(
+                                     image: AssetImage('assets/menu_icons/dailycapsule.png'),
+                                     fit: BoxFit.scaleDown,
+                                   )
+                               ),
+                             ),
+                           ),
+                           Wrap(children: <Widget>[
+                             Text('Subcribe Now',textAlign: TextAlign.end,
+                               style: TextStyle(
+                                 letterSpacing: 0.7,
+                                 fontSize: 15.0,
+                               ),)])
+                         ],
+                       ),
                      )),
                ],
              ),
            ),
             Container(
-//              padding: EdgeInsets.symmetric(vertical: .0),
               height: 10.0,
               color: Colors.blue.withOpacity(0.2),
             ),
@@ -86,6 +152,105 @@ class Home extends StatelessWidget {
               height: 10.0,
               color: Colors.blue.withOpacity(0.2),
             ),
+            ///Subjective Performance
+            ///
+            Container(
+              child: Column(
+                children: <Widget>[
+                  ListTile(
+                    title: Text(
+                      'Subjective Performance',
+                    style: TextStyle(
+                      fontSize: 20.0,
+//                      fontWeight: FontWeight.bold,
+                    ),),
+                    trailing: IconButton(
+                        icon: Icon(Icons.format_align_center),
+                        onPressed: (){
+                      print('chervol pressed ');
+                        }),
+                  ),
+                  ListTile(
+                    title: Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: Container(
+                            child: Text('Anaesthesia'),
+                          ),
+                        ),
+                        Container(
+                          height: 10.0,
+                          width: 170.0,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.0),
+                            gradient:  new LinearGradient(
+                              colors: [Color.fromRGBO(57, 160, 205, 1), Color.fromRGBO(5, 193, 154, 1)],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+
+                  ),
+                  ListTile(
+                    title: Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: Container(
+                            child: Text('Anaesthesia'),
+                          ),
+                        ),
+                        Container(
+                          height: 10.0,
+                          width: 170.0,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.0),
+                            gradient:  new LinearGradient(
+                              colors: [Color.fromRGBO(57, 160, 205, 1), Color.fromRGBO(5, 193, 154, 1)],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+
+                  ),
+                  ListTile(
+                    title: Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: Container(
+                            child: Text('Anaesthesia'),
+                          ),
+                        ),
+                        Container(
+                          height: 10.0,
+                          width: 170.0,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.0),
+                            gradient:  new LinearGradient(
+                              colors: [Color.fromRGBO(57, 160, 205, 1), Color.fromRGBO(5, 193, 154, 1)],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+
+                  ),
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 18.0),
+                        child: GradientButton(onPressed: (){}, title: 'See All',
+                            width: 150.0,
+                            height: 50.0,),
+                      )
+                    ],
+                  ),
+                ],
+              ),
+            ),
 
           ],
         ),
@@ -93,6 +258,25 @@ class Home extends StatelessWidget {
     );
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 class OverallScrore extends StatelessWidget {
   const OverallScrore({
@@ -109,6 +293,7 @@ class OverallScrore extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           Column(
+            mainAxisAlignment: MainAxisAlignment.center,
 //                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
@@ -119,23 +304,27 @@ class OverallScrore extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
                   mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(10.0),
-                          child: Container(
-                            width: 80.0,
-                            height: 55.0,
-                            child: Center(child: Text('64',style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.bold,
-                            ),)),
-                            decoration: BoxDecoration(
-                              shape: BoxShape.rectangle,
-                              color: Colors.blue,
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10.0),
+                            child: Container(
+                              width: 80.0,
+                              height: 55.0,
+                              child: Center(child: Text('64',style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.bold,
+                              ),)),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.rectangle,
+                                color: Colors.blue,
+                              ),
                             ),
                           ),
                         ),
@@ -263,9 +452,11 @@ class Noticeboard extends StatelessWidget {
                 Container(
                   child: Row(
                   children: <Widget>[
-                    Icon(Icons.warning,
-                      size: 28.0,
-                      color: Colors.red[300],),
+                    Container(
+                      width: 30.0,
+                        height: 50.0,
+                        child:
+                        Image.asset('assets/menu_icons/notice.png')),
                     Padding(
                       padding: const EdgeInsets.only(left: 10.0),
                       child: Text('Notice',style: TextStyle(
@@ -322,3 +513,33 @@ class Noticeboard extends StatelessWidget {
 }
 
 
+//Container(
+//child: ListView(
+//scrollDirection: Axis.horizontal,
+//children: <Widget>[
+//Card(
+//child: Column(
+//children: <Widget>[
+//ListTile(
+//trailing: CircleAvatar(
+//foregroundColor: Colors.blue,
+//),
+//title: Text('Poja Naiak'),
+//)
+//],
+//) ,
+//),
+//Card(
+//child: Column(
+//children: <Widget>[
+//ListTile(
+//trailing: CircleAvatar(
+//foregroundColor: Colors.blue,
+//),
+//title: Text('Poja Naiak'),
+//)
+//],
+//) ,
+//),              ],
+//),
+//)
