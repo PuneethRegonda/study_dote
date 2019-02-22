@@ -38,8 +38,8 @@ class FalshCard extends StatefulWidget {
   _FalshCardState createState() => _FalshCardState();
 }
 
-String question = 'Answer to the questionbnbbbbb23456789';
-int len = question.length;
+//String question = 'Answer to the questionbnbbbbb23456789';
+//int len = question.length;
 
 class _FalshCardState extends State<FalshCard> {
   bool pointerState = false;
