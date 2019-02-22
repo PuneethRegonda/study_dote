@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'cards_section_alignment.dart';
 import 'cards_section_draggable.dart';
 
 class SwipeFeedPage extends StatefulWidget

@@ -50,6 +50,15 @@ flutter:
     - assets/facebook.png
     - assets/female_gender.png
     - assets/loader.gif
+    - assets/menu_icons/dailycapsule.png
+    - assets/menu_icons/dashboard.png
+    - assets/menu_icons/flash.png
+    - assets/menu_icons/mockexam.png
+    - assets/menu_icons/notice.png
+    - assets/menu_icons/practicetest.png
+    - assets/menu_icons/reports.png
+    - assets/menu_icons/tagged.png
+    - assets/menu_icons/timedtest.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.
