@@ -304,7 +304,7 @@ class BottomFacebookGoogle extends StatelessWidget {
     final FirebaseUser currentUser = await _auth.currentUser();
     assert(user.uid == currentUser.uid);
     print(' signInWithGoogle succeeded : ' + " " + user.email + " " +
-        user.displayName + " " + "  " + user.photoUrl + " ");
+        user.displayName + " " + "  " + user.photoUrl + " " );
 
     _name = user.displayName;
     _email = user.email;

@@ -69,7 +69,7 @@ class _FalshCardState extends State<FalshCard> {
                       child: Wrap(
                           verticalDirection: VerticalDirection.down,
                           children: <Widget>[
-                            Text("Hello This will  be the card  answer")
+                            Text("Your answer will be shown here",textAlign: TextAlign.center,style: TextStyle(fontSize: 24.0),)
                           ]),
                     ),
                   ),

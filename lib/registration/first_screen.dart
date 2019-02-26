@@ -21,6 +21,8 @@ class FirstScreenState extends State<FirstScreen>
   AnimationController _controller;
   Animation<double> animation;
 
+  double _width,_height;
+
   @override
   void initState() {
     _controller =
@@ -35,6 +37,9 @@ class FirstScreenState extends State<FirstScreen>
 
   @override
   Widget build(BuildContext context) {
+    _width = MediaQuery.of(context).size.width;
+    _height = MediaQuery.of(context).size.height;
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Container(
@@ -44,7 +49,40 @@ class FirstScreenState extends State<FirstScreen>
             opacity: _controller,
             child: BodyLayOut(),
           )),
+      //bottomNavigationBar: _getBottomSheet(),
     );
+  }
+
+  Widget _getBottomSheet(){
+    return Column(
+      children: <Widget>[
+      GradientButton(
+        onPressed: () {
+          Navigator.of(context).push(CupertinoPageRoute(
+              builder: (BuildContext context) => SignUp()));
+        },
+        title: ' Signup ',
+        width: _width*8/10,
+        height: 60.0,
+        isgradientcolor: true,
+      ),
+      SizedBox(
+        height: 10.0,
+      ),
+      GradientButton(
+        onPressed: () {
+          Navigator.of(context).push(CupertinoPageRoute(
+              builder: (BuildContext context) => Login()));
+        },
+        title: 'Login',
+        width: _width*8/10,
+        height: 60.0,
+        isgradientcolor: false,
+      ),
+      SizedBox(
+        height: 10.0,
+      ),
+    ],);
   }
 }
 
@@ -60,26 +98,30 @@ class BodyLayOut extends StatelessWidget {
 
     return Column(
       children: <Widget>[
+//        Container(
+//          decoration: BoxDecoration(
+//            borderRadius: BorderRadius.circular(10.0),
+//            image: DecorationImage(
+//                image: AssetImage('assets/first_screen.png'),
+//                fit: BoxFit.fitHeight),
+//          ),
+//          height: height*3.5/10,
+//          width: width*9/10,
+//        ),
         SizedBox(
-          height: 50.0,
-        ),
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10.0),
-            image: DecorationImage(
-                image: AssetImage('assets/first_screen.png'),
-                fit: BoxFit.fitHeight),
+          height: 300.0,
+          child: Stack(
+            children: <Widget>[
+              Image.asset('assets/doc_with_tab_fs.png',fit: BoxFit.fitWidth,),
+              Positioned(top: 100.0,right:0.0,left: 0.0,child: Image.asset('assets/study_dote_fs.png')),
+            ],
           ),
-//            child:  Center(child: Image.asset('assets/FirstScreen.PNG')),
-//              width: double.infinity,
-          height: height*3.5/10,
-          width: width*9/10,
         ),
         SizedBox(height: 10.0,),
         SizedBox(
           child: Text("Welcome to StudyDote", textAlign: TextAlign.center,
             style: TextStyle(
-                fontSize: height * 0.35 / 10, fontWeight: FontWeight.w800),),
+                fontSize: height * 0.40 / 10, fontWeight: FontWeight.w800),),
         ),
         SizedBox(height: 10.0,),
         SizedBox(
@@ -87,7 +129,7 @@ class BodyLayOut extends StatelessWidget {
           child: Text("Most trusted platform for MD/MS entrance examination",
             textAlign: TextAlign.center,
             style: TextStyle(
-                fontSize: height * 0.22 / 10),),
+                fontSize: height * 0.26 / 10),),
         ),
         Expanded(
           child: SizedBox(),
@@ -103,7 +145,7 @@ class BodyLayOut extends StatelessWidget {
           isgradientcolor: true,
         ),
         SizedBox(
-          height: 10.0,
+          height: 25.0,
         ),
         GradientButton(
           onPressed: () {
@@ -116,7 +158,7 @@ class BodyLayOut extends StatelessWidget {
           isgradientcolor: false,
         ),
         SizedBox(
-          height: 10.0,
+          height: 50.0,
         ),
       ],
     );

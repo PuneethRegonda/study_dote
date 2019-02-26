@@ -14,11 +14,21 @@ class MyPrefs{
     return true;
   }
 
+  static Future<bool> setTokenLoginDetails(String id,String password,String email,String token,String rtoken) async{
+    preferences = await SharedPreferences.getInstance();
+    preferences.setBool('isloggedin',true);
+    preferences.setString('id',id);
+    preferences.setString('email',email);
+    preferences.setString('password',password);
+    preferences.setString('token',token);
+    preferences.setString('rtoken',rtoken);
+    return true;
+  }
+
   static Future<bool> setUserLoggedIn() async{
     preferences = await SharedPreferences.getInstance();
     return preferences.setBool('isloggedin',true);
   }
-
 
   static Future<bool> checkOnFirstLaunch() async{
     preferences = await SharedPreferences.getInstance();
@@ -26,7 +36,6 @@ class MyPrefs{
       return preferences.getBool('isloggedin') ?? false;
     //});
   }
-
 
   static Future<bool> isUserLoggedIn() async{
     preferences = await SharedPreferences.getInstance();
@@ -41,6 +50,16 @@ class MyPrefs{
   static Future<bool> setToken(String token) async{
     preferences = await SharedPreferences.getInstance();
     return preferences.setString('token',token);
+  }
+
+  static Future<String> getRToken() async{
+    preferences = await SharedPreferences.getInstance();
+    return preferences.getString('rtoken');
+  }
+
+  static Future<bool> setRToken(String rtoken) async{
+    preferences = await SharedPreferences.getInstance();
+    return preferences.setString('rtoken',rtoken);
   }
 
   static Future<String> getID() async{

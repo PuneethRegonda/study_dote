@@ -1,9 +1,19 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
+import 'package:study_dote/common/progress_dialog.dart';
+import 'package:study_dote/home.dart';
 import 'package:study_dote/registration/signup.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:study_dote/common/gradient_button.dart';
 import 'package:study_dote/scoped_model/scopedmodel.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:study_dote/utils/Urls.dart';
+import 'package:study_dote/utils/my_prefs.dart';
+
+String _email,_password;
+ProgressDialog _pr;
 
 class Login extends StatefulWidget {
   @override
@@ -18,11 +28,12 @@ final Shader linearGradient = LinearGradient(
 
 class _LoginState extends State<Login> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  String _email = '', _password = '';
   Size _size;
 
   @override
   Widget build(BuildContext context) {
+    _pr = new ProgressDialog(context);
+    _pr.setMessage('Signing you in...');
     _size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: () {
@@ -85,7 +96,7 @@ class _LoginState extends State<Login> {
                                   borderRadius: BorderRadius.all(
                                       Radius.circular(_size.width * 0.025))),
                               hintText: 'Email',
-                              labelText: 'ex@email.com',
+                              labelText: 'example@email.com',
                             ),
                           ),
                         ),
@@ -133,19 +144,11 @@ class _LoginState extends State<Login> {
                           children: <Widget>[
                             GradientButton(
                               onPressed: () {
-//                            print(_size.height * 0.078);
                                 if (_formKey.currentState.validate()) {
                                   FocusScope.of(context)
                                       .requestFocus(FocusNode());
                                   _formKey.currentState.save();
                                   _makeLoginRequest();
-//                                if(value)
-//                                  Navigator.of(context).pushReplacement(
-//                                      CupertinoPageRoute(
-//                                          builder: (BuildContext context) => Home()));
-//                                else
-//                                  print('error');
-
                                 }
                               },
                               title: 'Login',
@@ -158,8 +161,7 @@ class _LoginState extends State<Login> {
                     ),
                   ],
                 ),
-//              color: Colors.blue,
-              ),
+              ),//              color: Colors.blue,
             ]),
           ),
         );
@@ -167,9 +169,33 @@ class _LoginState extends State<Login> {
     );
   }
 
-  Future _makeLoginRequest() {
+  /*
+  {"access_token":"DQAnZaXoBkSK7ALxS2ESnuPEK3ybEGVCuq3ptIAYhPg16l9rT9jfNOAOQhLGQuSu3xt0j1lwa4T0u0YKDdo2eKw5xNvwS8YEf5yXmjSPsM0C2swHCcM7SVXvJj23bUrJx5xMBFOjCSGCwhLc8P3d6QB8ZfY0yQBUOSESsVvD3QyV9Fjm48kKHmRBT2JLesxILn2SItVSGEtxjYYAYqDamfRPdYlGnTnysGpsRHJTndrGeWqY5zRDbgBk3Hc6owh",
+  "refresh_token":"LVuMupFJ4OSVav0dQzAmcNE9NrqULrNRWoiCxn0SueaA4eiftILhgWUXW0X4zXkCdPz9TeISyRPhZBlxaYR5p3AEBVGuwy5TzReLW43tou3eCfhwtIVaooWAjsvh7aKQf5hpHYIXYh0QMaUbpBpljBc3yBOB3DKvg713sRwGv65OagcBvMgYsbaDxNXeLfF16UEBqr3py1mm6uwvIhSiWLIx5fZ0GHg0zKHKgtS8BzATwKrIYTtm3ngGdO2FiHO",
+  "token_type":"Bearer"}
+   */
+
+  Future _makeLoginRequest() async {
+    _pr.show();
     print('$_email' + '$_password');
-    //return true;
+
+    Map<String,String> headers = {'Content-Type':'application/json','Accept': 'application/json','authorization':'Basic c3R1ZHlkb3RlOnN0dWR5ZG90ZTEyMw=='};
+
+    var response = await post(Urls.getToken,
+      headers: headers,
+      body: jsonEncode({"grant_type":"password","username":_email,"password":_password,"scope":"offline_access"}),
+    );
+
+    var jsonData = jsonDecode(response.body);
+    if(jsonData['access_token']!=null){
+      MyPrefs.setTokenLoginDetails('', _password, _email, jsonData['access_token'],jsonData['refresh_token']);
+      _pr.hide();
+      Navigator.of(context).pushReplacement(CupertinoPageRoute(
+          builder: (BuildContext context) => Home()));
+    } else{
+      _pr.hide();
+      new MessageBox(context, 'Sorry your login credentials are incorrect, please try again', 'Error').show();
+    }
   }
 }
 
@@ -188,7 +214,6 @@ class BottomFacebookGoogle extends StatelessWidget {
         children: <Widget>[
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-//                    mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               SizedBox(
                 height: 50.0,
@@ -197,15 +222,11 @@ class BottomFacebookGoogle extends StatelessWidget {
                 'Login With',
                 style: TextStyle(
                   fontSize: 20.0,
-//                        color: Colors.black,
                   foreground: Paint()..shader = linearGradient,
                 ),
               )
             ],
           ),
-//                  SizedBox(
-//                    height: 30.0,
-//                  ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
@@ -246,8 +267,6 @@ class BottomFacebookGoogle extends StatelessWidget {
                   color: Color.fromRGBO(58, 89, 152, 1),
                 ),
               ),
-
-              ///
             ],
           ),
           SizedBox(

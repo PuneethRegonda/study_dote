@@ -20,7 +20,7 @@ class _SplashScreenState extends State<SplashScreen>
         width: 120.0,
         height: 120.0,
         child: AlertDialog(
-          content: Text('Its erorr in loading check your network'),
+          content: Text('There\'s an erorr in your internet connection'),
           actions: <Widget>[
             FlatButton(
                 onPressed: () {

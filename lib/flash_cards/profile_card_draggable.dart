@@ -73,13 +73,13 @@ class ProfileCardDraggable extends StatelessWidget {
                     child: new Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        FlatButton(
-                          onPressed: () {
-
-
-                          },
-                          child: Text('hello'),
-                        ),
+//                        FlatButton(
+//                          onPressed: () {
+//
+//
+//                          },
+//                          child: Text('hello'),
+//                        ),
                         new Text('Card number $cardNum',
                             style: new TextStyle(
                                 fontSize: 20.0, fontWeight: FontWeight.w700)),
