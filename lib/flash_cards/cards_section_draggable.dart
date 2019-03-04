@@ -1,4 +1,5 @@
  import 'package:flutter/material.dart';
+import 'package:study_dote/loaded_data/loaded_data.dart';
 import 'profile_card_draggable.dart';
 
 class CardsSectionDraggable extends StatefulWidget {
@@ -16,8 +17,10 @@ class _CardsSectionState extends State<CardsSectionDraggable> {
     super.initState();
 
     for (cardsCounter = 0; cardsCounter < 3; cardsCounter++) {
-      cards.add(new ProfileCardDraggable(cardsCounter));
+      cards.add(new ProfileCardDraggable
+        (cardsCounter,LoadedData.flashCards[cardsCounter].question,LoadedData.flashCards[cardsCounter].answer,LoadedData.flashCards[cardsCounter].headerTitle));
     }
+
   }
 
   @override
@@ -91,8 +94,10 @@ class _CardsSectionState extends State<CardsSectionDraggable> {
       cards[1] = cards[2];
       cards[2] = temp;
 
-      cards[2] = new ProfileCardDraggable(cardsCounter);
+      cards[2] = new ProfileCardDraggable
+        (cardsCounter,LoadedData.flashCards[cardsCounter].question,LoadedData.flashCards[cardsCounter].answer,LoadedData.flashCards[cardsCounter].headerTitle);
       cardsCounter++;
+      //LoadedData.flashCards[cardsCounter].question),LoadedData.flashCards[cardsCounter].answer,LoadedData.flashCards[cardsCounter].headerTitle
     });
   }
 

@@ -1,10 +1,83 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:study_dote/common/progress_men.dart';
+import 'package:study_dote/data_models/flash_card.dart';
+import 'package:study_dote/loaded_data/loaded_data.dart';
 import 'package:study_dote/scoped_model/scopedmodel.dart';
+import 'package:study_dote/utils/api_requests.dart';
+import 'package:study_dote/utils/my_prefs.dart';
 import 'swipe_feed_page.dart';
 import 'dart:math';
 
-class FlashCardMain extends StatelessWidget {
+String subIds = '';
+
+List<FlashCardDM> _flashCards = [];
+String _titleOfFlipButton = 'Show answer';
+
+bool isDataLoaded = false;
+
+class FlashCardMain extends StatefulWidget {
+  FlashCardMain(String ids) {
+    subIds = ids;
+  }
+
+  @override
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    return FlashCardMainState();
+  }
+}
+
+class FlashCardMainState extends State<FlashCardMain>{
+
+  FlashCardMainState(){
+    _fetchCards();
+  }
+
+  Future _fetchCards() async {
+    _flashCards = [];
+    MyPrefs.getToken().then((String token) async {
+      var response = await get('https://api.studydote.com/flashcard?limit=20&offset=80',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token'
+          },);
+      print(response.body);
+      if (response.body.contains('Unauthorized')) {
+        ApiRequest.getAuthTokenAgain().then((String onValue) {
+          _fetchCards();
+        });
+      } else {
+        var jsonData = json.decode(response.body);
+        for (var p in jsonData) {
+          FlashCardDM subject = FlashCardDM(
+              id: p['id'],
+              subjectId: p['subject_id'],
+              headerTitle: p['header_title'],
+              question: p['questions'],
+              answer: p['answer']);
+          //   print('${subject.id} \n');
+          _flashCards.add(subject);
+        }
+        setState(() {
+          isDataLoaded = true;
+        });
+        LoadedData.flashCards = _flashCards;
+      }
+    });
+  }
+
+  Widget whatToShow(){
+    if(isDataLoaded){
+      return FlashCard();
+    }else{
+      return ShowProgressMen.centerProgress;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -14,34 +87,41 @@ class FlashCardMain extends StatelessWidget {
             icon: Icon(Icons.arrow_back_ios),
             onPressed: () => Navigator.of(context).pop()),
       ),
-      body: FalshCard(),
+      body: FlashCard(),
       bottomNavigationBar: Padding(
-          padding: const EdgeInsets.only(bottom: 10.0, left: 20.0,right: 20.0),
-          child: ScopedModelDescendant(builder: (BuildContext context,Widget child, FlipScoppedModel model){
+          padding: const EdgeInsets.only(bottom: 10.0, left: 20.0, right: 20.0),
+          child: ScopedModelDescendant(builder:
+              (BuildContext context, Widget child, FlipScoppedModel model) {
             return GradientButton(
               onPressed: () {
-                print('hello');
+                //print('hello');
+                setState(() {
+                  if(_titleOfFlipButton == 'Show answer')
+                    _titleOfFlipButton = 'Hide answer';
+                  else
+                    _titleOfFlipButton = 'Show answer';
+                });
                 return model.toggleCard();
               },
-              title: 'FlipCard',
-              width: size.width * 0.5/10,
+              title: _titleOfFlipButton,
+              width: size.width * 0.5 / 10,
               height: size.height * 0.078,
             );
-          })
-      ),
+          })),
     );
   }
+
 }
 
-class FalshCard extends StatefulWidget {
+class FlashCard extends StatefulWidget {
   @override
-  _FalshCardState createState() => _FalshCardState();
+  _FlashCardState createState() => _FlashCardState();
 }
 
 //String question = 'Answer to the questionbnbbbbb23456789';
 //int len = question.length;
 
-class _FalshCardState extends State<FalshCard> {
+class _FlashCardState extends State<FlashCard> {
   bool pointerState = false;
 
   @override
@@ -53,31 +133,35 @@ class _FalshCardState extends State<FalshCard> {
   Widget build(BuildContext context) {
     return ScopedModelDescendant(
         builder: (BuildContext context, widget, FlipScoppedModel model) {
-          return FlipCard(
-            model: model,
-            direction: FlipDirection.HORIZONTAL,
-            front: AbsorbPointer(absorbing: pointerState, child: SwipeFeedPage()),
-            back: AbsorbPointer(
-              absorbing: true,
-              child: Stack(
-                children: <Widget>[
-                  GestureDetector(
-                    onTap: () {
-                      return FocusScope.of(context).requestFocus(FocusNode());
-                    },
-                    child: Center(
-                      child: Wrap(
-                          verticalDirection: VerticalDirection.down,
-                          children: <Widget>[
-                            Text("Your answer will be shown here",textAlign: TextAlign.center,style: TextStyle(fontSize: 24.0),)
-                          ]),
-                    ),
-                  ),
-                ],
+      return FlipCard(
+        model: model,
+        direction: FlipDirection.HORIZONTAL,
+        front: AbsorbPointer(absorbing: pointerState, child: SwipeFeedPage()),
+        back: AbsorbPointer(
+          absorbing: true,
+          child: Stack(
+            children: <Widget>[
+              GestureDetector(
+                onTap: () {
+                  return FocusScope.of(context).requestFocus(FocusNode());
+                },
+                child: Center(
+                  child: Wrap(
+                      verticalDirection: VerticalDirection.down,
+                      children: <Widget>[
+                        Text(
+                          "Your answer will be shown here",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 24.0),
+                        )
+                      ]),
+                ),
               ),
-            ),
-          );
-        });
+            ],
+          ),
+        ),
+      );
+    });
   }
 }
 
@@ -125,10 +209,10 @@ class FlipCard extends StatefulWidget {
 
   const FlipCard(
       {Key key,
-        @required this.model,
-        @required this.front,
-        @required this.back,
-        this.direction = FlipDirection.HORIZONTAL})
+      @required this.model,
+      @required this.front,
+      @required this.back,
+      this.direction = FlipDirection.HORIZONTAL})
       : super(key: key);
 
   @override
@@ -144,7 +228,7 @@ class _FlipCardState extends State<FlipCard>
 //  Animation<double> backRotation;
 //
 //  bool isFront = true;
-///these r in scopedmodel
+  ///these r in scopedmodel
   @override
   void initState() {
     super.initState();
@@ -210,10 +294,10 @@ class _FlipCardState extends State<FlipCard>
 class GradientButton extends StatelessWidget {
   const GradientButton(
       {Key key,
-        @required this.onPressed,
-        @required this.title,
-        @required this.width,
-        @required this.height})
+      @required this.onPressed,
+      @required this.title,
+      @required this.width,
+      @required this.height})
       : super(key: key);
 
   final Function onPressed;
@@ -247,5 +331,3 @@ class GradientButton extends StatelessWidget {
     );
   }
 }
-
-

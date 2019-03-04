@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:study_dote/data_models/user_data.dart';
+import 'package:study_dote/flash_cards/flash_card_select_topics.dart';
 import 'package:study_dote/flash_cards/flash_main.dart';
 
 final Shader linearGradient = LinearGradient(
@@ -17,6 +19,14 @@ class Home extends StatelessWidget {
       drawer: Drawer(
         child: Column(
           children: <Widget>[
+            new UserAccountsDrawerHeader(
+              accountEmail: Text('${UserData.email}'),
+              accountName: Text('Mani'),
+              currentAccountPicture: CircleAvatar(
+                radius: 60.0,
+                child: Image.asset('assets/person.png'),
+              ),
+            ),
             SizedBox(
               height: 20.0,
             ),
@@ -30,13 +40,12 @@ class Home extends StatelessWidget {
               title: Text('Flash Cards'),
               onTap: () {
                 Navigator.of(context).push(CupertinoPageRoute(
-                    builder: (BuildContext context) => FlashCardMain()));
+                    builder: (BuildContext context) => LetsFlashCard()));
               },
             )
           ],
         ),
       ),
-
       body: Container(
         child: ListView(
           scrollDirection: Axis.vertical,
@@ -45,103 +54,116 @@ class Home extends StatelessWidget {
               padding: EdgeInsets.all(10.0),
               child: new Noticeboard(),
             ),
-           Container(
-             color: Colors.white,
-             padding: EdgeInsets.all(10.0),
-             child: Row(
-               mainAxisSize: MainAxisSize.max,
-               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-               children: <Widget>[
-                 ClipRRect(
-                     borderRadius: BorderRadius.circular(10.0),
-                     child: Container(
-                       width: 110.0,
-                       height: 80.0,
-                       child: Column(
-                         children: <Widget>[
-                           Padding(
-                             padding: const EdgeInsets.all(8.0),
-                             child: Container(
-                               width: 50.0,
-                               height: 40.0,
-                               decoration: BoxDecoration(
-                                   image: DecorationImage(image: AssetImage('assets/menu_icons/dailycapsule.png'),
-                                     fit: BoxFit.scaleDown,
-                                   )
-                               ),
-                             ),
-                           ),
-                           Wrap(children: <Widget>[
-                             Text('Daliy Capsule',textAlign: TextAlign.end,
-                             style: TextStyle(
-                               letterSpacing: 0.7,
-                               fontSize: 15.0,
-                             ),)])
-                         ],
-                       ),
+            Container(
+              color: Colors.white,
+              padding: EdgeInsets.all(10.0),
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  ClipRRect(
+                      borderRadius: BorderRadius.circular(10.0),
+                      child: Container(
+                        width: 110.0,
+                        height: 80.0,
+                        child: Column(
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                width: 50.0,
+                                height: 40.0,
+                                decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                  image: AssetImage(
+                                      'assets/menu_icons/dailycapsule.png'),
+                                  fit: BoxFit.scaleDown,
+                                )),
+                              ),
+                            ),
+                            Wrap(children: <Widget>[
+                              Text(
+                                'Daliy Capsule',
+                                textAlign: TextAlign.end,
+                                style: TextStyle(
+                                  letterSpacing: 0.7,
+                                  fontSize: 15.0,
+                                ),
+                              )
+                            ])
+                          ],
+                        ),
 //                  child: ,
-                     )),
-                 ClipRRect(
-                     borderRadius: BorderRadius.circular(10.0),
-                     child: Container(
-                       width: 110.0,
-                       height: 80.0,
-                       child: Column(
-                         children: <Widget>[
-                           Padding(
-                             padding: const EdgeInsets.all(8.0),
-                             child: Container(
-                               width: 50.0,
-                               height: 40.0,
-                               decoration: BoxDecoration(
-                                   image: DecorationImage(
-                                     image: AssetImage('assets/menu_icons/flash.png'),
-                                     fit: BoxFit.scaleDown,
-                                   )
-                               ),
-                             ),
-                           ),
-                           Wrap(children: <Widget>[
-                             Text('Flash Cards',textAlign: TextAlign.end,
-                               style: TextStyle(
-                                 letterSpacing: 0.7,
-                                 fontSize: 15.0,
-                               ),)])
-                         ],
-                       ),
-                     )),
-                 ClipRRect(
-                     borderRadius: BorderRadius.circular(10.0),
-                     child: Container(
-                       width: 110.0,
-                       height: 80.0,
-                       child: Column(
-                         children: <Widget>[
-                           Padding(
-                             padding: const EdgeInsets.all(8.0),
-                             child: Container(
-                               width: 50.0,
-                               height: 40.0,
-                               decoration: BoxDecoration(
-                                   image: DecorationImage(
-                                     image: AssetImage('assets/menu_icons/dailycapsule.png'),
-                                     fit: BoxFit.scaleDown,
-                                   )
-                               ),
-                             ),
-                           ),
-                           Wrap(children: <Widget>[
-                             Text('Subcribe Now',textAlign: TextAlign.end,
-                               style: TextStyle(
-                                 letterSpacing: 0.7,
-                                 fontSize: 15.0,
-                               ),)])
-                         ],
-                       ),
-                     )),
-               ],
-             ),
-           ),
+                      )),
+                  ClipRRect(
+                      borderRadius: BorderRadius.circular(10.0),
+                      child: Container(
+                        width: 110.0,
+                        height: 80.0,
+                        child: Column(
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                width: 50.0,
+                                height: 40.0,
+                                decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                  image:
+                                      AssetImage('assets/menu_icons/flash.png'),
+                                  fit: BoxFit.scaleDown,
+                                )),
+                              ),
+                            ),
+                            Wrap(children: <Widget>[
+                              Text(
+                                'Flash Cards',
+                                textAlign: TextAlign.end,
+                                style: TextStyle(
+                                  letterSpacing: 0.7,
+                                  fontSize: 15.0,
+                                ),
+                              )
+                            ])
+                          ],
+                        ),
+                      )),
+                  ClipRRect(
+                      borderRadius: BorderRadius.circular(10.0),
+                      child: Container(
+                        width: 110.0,
+                        height: 80.0,
+                        child: Column(
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                width: 50.0,
+                                height: 40.0,
+                                decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                  image: AssetImage(
+                                      'assets/menu_icons/dailycapsule.png'),
+                                  fit: BoxFit.scaleDown,
+                                )),
+                              ),
+                            ),
+                            Wrap(children: <Widget>[
+                              Text(
+                                'Subcribe Now',
+                                textAlign: TextAlign.end,
+                                style: TextStyle(
+                                  letterSpacing: 0.7,
+                                  fontSize: 15.0,
+                                ),
+                              )
+                            ])
+                          ],
+                        ),
+                      )),
+                ],
+              ),
+            ),
             Container(
               height: 10.0,
               color: Colors.blue.withOpacity(0.2),
@@ -152,6 +174,7 @@ class Home extends StatelessWidget {
               height: 10.0,
               color: Colors.blue.withOpacity(0.2),
             ),
+
             ///Subjective Performance
             ///
             Container(
@@ -160,14 +183,15 @@ class Home extends StatelessWidget {
                   ListTile(
                     title: Text(
                       'Subjective Performance',
-                    style: TextStyle(
-                      fontSize: 20.0,
+                      style: TextStyle(
+                        fontSize: 20.0,
 //                      fontWeight: FontWeight.bold,
-                    ),),
+                      ),
+                    ),
                     trailing: IconButton(
                         icon: Icon(Icons.format_align_center),
-                        onPressed: (){
-                      print('chervol pressed ');
+                        onPressed: () {
+                          print('chervol pressed ');
                         }),
                   ),
                   ListTile(
@@ -183,14 +207,16 @@ class Home extends StatelessWidget {
                           width: 170.0,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10.0),
-                            gradient:  new LinearGradient(
-                              colors: [Color.fromRGBO(57, 160, 205, 1), Color.fromRGBO(5, 193, 154, 1)],
+                            gradient: new LinearGradient(
+                              colors: [
+                                Color.fromRGBO(57, 160, 205, 1),
+                                Color.fromRGBO(5, 193, 154, 1)
+                              ],
                             ),
                           ),
                         ),
                       ],
                     ),
-
                   ),
                   ListTile(
                     title: Row(
@@ -205,14 +231,16 @@ class Home extends StatelessWidget {
                           width: 170.0,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10.0),
-                            gradient:  new LinearGradient(
-                              colors: [Color.fromRGBO(57, 160, 205, 1), Color.fromRGBO(5, 193, 154, 1)],
+                            gradient: new LinearGradient(
+                              colors: [
+                                Color.fromRGBO(57, 160, 205, 1),
+                                Color.fromRGBO(5, 193, 154, 1)
+                              ],
                             ),
                           ),
                         ),
                       ],
                     ),
-
                   ),
                   ListTile(
                     title: Row(
@@ -227,14 +255,16 @@ class Home extends StatelessWidget {
                           width: 170.0,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10.0),
-                            gradient:  new LinearGradient(
-                              colors: [Color.fromRGBO(57, 160, 205, 1), Color.fromRGBO(5, 193, 154, 1)],
+                            gradient: new LinearGradient(
+                              colors: [
+                                Color.fromRGBO(57, 160, 205, 1),
+                                Color.fromRGBO(5, 193, 154, 1)
+                              ],
                             ),
                           ),
                         ),
                       ],
                     ),
-
                   ),
                   Row(
                     mainAxisSize: MainAxisSize.max,
@@ -242,41 +272,24 @@ class Home extends StatelessWidget {
                     children: <Widget>[
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 18.0),
-                        child: GradientButton(onPressed: (){}, title: 'See All',
-                            width: 150.0,
-                            height: 50.0,),
+                        child: GradientButton(
+                          onPressed: () {},
+                          title: 'See All',
+                          width: 150.0,
+                          height: 50.0,
+                        ),
                       )
                     ],
                   ),
                 ],
               ),
             ),
-
           ],
         ),
       ),
     );
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 class OverallScrore extends StatelessWidget {
   const OverallScrore({
@@ -297,9 +310,12 @@ class OverallScrore extends StatelessWidget {
 //                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Text('Overall Score',style: TextStyle(
-                fontSize: 23.0,
-              ),),
+              Text(
+                'Overall Score',
+                style: TextStyle(
+                  fontSize: 23.0,
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
@@ -316,11 +332,15 @@ class OverallScrore extends StatelessWidget {
                             child: Container(
                               width: 80.0,
                               height: 55.0,
-                              child: Center(child: Text('64',style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20.0,
-                                fontWeight: FontWeight.bold,
-                              ),)),
+                              child: Center(
+                                  child: Text(
+                                '64',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )),
                               decoration: BoxDecoration(
                                 shape: BoxShape.rectangle,
                                 color: Colors.blue,
@@ -330,7 +350,9 @@ class OverallScrore extends StatelessWidget {
                         ),
                         Padding(
                           padding: const EdgeInsets.all(5.0),
-                          child: Text('Attempts',),
+                          child: Text(
+                            'Attempts',
+                          ),
                         )
                       ],
                     ),
@@ -343,11 +365,15 @@ class OverallScrore extends StatelessWidget {
                             child: Container(
                               width: 80.0,
                               height: 55.0,
-                              child: Center(child: Text('64',style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20.0,
-                                fontWeight: FontWeight.bold,
-                              ),)),
+                              child: Center(
+                                  child: Text(
+                                '64',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )),
                               decoration: BoxDecoration(
                                 shape: BoxShape.rectangle,
                                 color: Color.fromRGBO(96, 196, 146, 1),
@@ -356,7 +382,9 @@ class OverallScrore extends StatelessWidget {
                           ),
                           Padding(
                             padding: const EdgeInsets.all(5.0),
-                            child: Text('Correct',),
+                            child: Text(
+                              'Correct',
+                            ),
                           )
                         ],
                       ),
@@ -370,11 +398,15 @@ class OverallScrore extends StatelessWidget {
                             child: Container(
                               width: 80.0,
                               height: 55.0,
-                              child: Center(child: Text('64',style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20.0,
-                                fontWeight: FontWeight.bold,
-                              ),)),
+                              child: Center(
+                                  child: Text(
+                                '64',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )),
                               decoration: BoxDecoration(
                                 shape: BoxShape.rectangle,
                                 color: Colors.red[300],
@@ -383,11 +415,14 @@ class OverallScrore extends StatelessWidget {
                           ),
                           Padding(
                             padding: const EdgeInsets.all(5.0),
-                            child: Text('Incorrect',),
+                            child: Text(
+                              'Incorrect',
+                            ),
                           )
                         ],
                       ),
-                    ), Padding(
+                    ),
+                    Padding(
                       padding: const EdgeInsets.all(5.0),
                       child: Column(
                         children: <Widget>[
@@ -396,11 +431,15 @@ class OverallScrore extends StatelessWidget {
                             child: Container(
                               width: 80.0,
                               height: 55.0,
-                              child: Center(child: Text('64',style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20.0,
-                                fontWeight: FontWeight.bold,
-                              ),)),
+                              child: Center(
+                                  child: Text(
+                                '64',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )),
                               decoration: BoxDecoration(
                                 shape: BoxShape.rectangle,
                                 color: Colors.amber.withOpacity(0.5),
@@ -409,7 +448,9 @@ class OverallScrore extends StatelessWidget {
                           ),
                           Padding(
                             padding: const EdgeInsets.all(5.0),
-                            child: Text('Percentage',),
+                            child: Text(
+                              'Percentage',
+                            ),
                           )
                         ],
                       ),
@@ -451,27 +492,30 @@ class Noticeboard extends StatelessWidget {
               children: <Widget>[
                 Container(
                   child: Row(
-                  children: <Widget>[
-                    Container(
-                      width: 30.0,
-                        height: 50.0,
-                        child:
-                        Image.asset('assets/menu_icons/notice.png')),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10.0),
-                      child: Text('Notice',style: TextStyle(
-                        fontSize: 20.0,
-                        color: Colors.red,
-                      ),),
-                    ),
-                  ],
+                    children: <Widget>[
+                      Container(
+                          width: 30.0,
+                          height: 50.0,
+                          child: Image.asset('assets/menu_icons/notice.png')),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10.0),
+                        child: Text(
+                          'Notice',
+                          style: TextStyle(
+                            fontSize: 20.0,
+                            color: Colors.red,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 SizedBox(
                   width: 30.0,
                 ),
-                IconButton(icon: Icon(Icons.remove_circle_outline),
-                    onPressed: (){
+                IconButton(
+                    icon: Icon(Icons.remove_circle_outline),
+                    onPressed: () {
                       print('need to remove the Notice ');
                     }),
 
@@ -486,32 +530,32 @@ class Noticeboard extends StatelessWidget {
 //               ),
               ],
             ),
-           Divider(),
-           Row(
-             mainAxisSize: MainAxisSize.max,
-             children: <Widget>[
-
-               SizedBox(
-                 width: 20.0,
-               ),
-               Wrap(
-                   children: <Widget>[
-                     Padding(
-                       padding: const EdgeInsets.all(8.0),
-                       child: Text('NAMS Physiology is now live',
-                         style: TextStyle(
-                           fontSize: 18.0,
-                         ),),
-                     )]),
-             ],
-           ),
+            Divider(),
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                SizedBox(
+                  width: 20.0,
+                ),
+                Wrap(children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      'NAMS Physiology is now live',
+                      style: TextStyle(
+                        fontSize: 18.0,
+                      ),
+                    ),
+                  )
+                ]),
+              ],
+            ),
           ],
         ),
       ),
     );
   }
 }
-
 
 //Container(
 //child: ListView(

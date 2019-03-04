@@ -25,7 +25,7 @@ dependencies:
   http: ^0.12.0+1
   scoped_model: ^1.0.1
   cached_network_image: ^0.6.0+1
-
+  universal_widget: ^1.2.5
 
 
 dev_dependencies:
@@ -51,6 +51,7 @@ flutter:
     - assets/facebook.png
     - assets/female_gender.png
     - assets/loader.gif
+    - assets/loader_new.gif
     - assets/menu_icons/dailycapsule.png
     - assets/menu_icons/dashboard.png
     - assets/menu_icons/flash.png
@@ -60,6 +61,8 @@ flutter:
     - assets/menu_icons/reports.png
     - assets/menu_icons/tagged.png
     - assets/menu_icons/timedtest.png
+    - assets/menu_icons/badge_question.png
+    - assets/menu_icons/badge_answer.png
     - assets/study_dote_fs.png
     - assets/doc_with_tab_fs.png
     - assets/person.png

@@ -5,8 +5,8 @@ int len = Question.length;
 
 class ProfileCardDraggable extends StatelessWidget {
   final int cardNum;
-
-  ProfileCardDraggable(this.cardNum);
+  String question,answer,topic;
+  ProfileCardDraggable(this.cardNum,this.question,this.answer,this.topic);
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,7 @@ class ProfileCardDraggable extends StatelessWidget {
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text('Topic',style: TextStyle(fontSize: 30.0),textAlign: TextAlign.start,),
+                  child: Text('$topic',style: TextStyle(fontSize: 30.0),textAlign: TextAlign.start,),
                 ),
 
                 new Expanded(
@@ -47,7 +47,7 @@ class ProfileCardDraggable extends StatelessWidget {
                                 MainAxisAlignment.spaceEvenly,
                                 children: <Widget>[
                                   Text(
-                                    'Here Wil Be The Question?',
+                                    '$question',
                                     textScaleFactor: 0.9,
                                     softWrap: true,
                                     textAlign: TextAlign.justify,
@@ -80,9 +80,9 @@ class ProfileCardDraggable extends StatelessWidget {
 //                          },
 //                          child: Text('hello'),
 //                        ),
-                        new Text('Card number $cardNum',
-                            style: new TextStyle(
-                                fontSize: 20.0, fontWeight: FontWeight.w700)),
+//                        new Text('Card number $cardNum',
+//                            style: new TextStyle(
+//                                fontSize: 20.0, fontWeight: FontWeight.w700)),
 //                        new Padding(padding: new EdgeInsets.only(bottom: 8.0)),
 //                        new Text('A short description.',
 //                            textAlign: TextAlign.start),

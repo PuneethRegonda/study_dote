@@ -1,145 +1,183 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:http/http.dart';
+import 'package:study_dote/common/progress_dialog.dart';
+import 'package:study_dote/common/progress_men.dart';
+import 'package:study_dote/data_models/subjects.dart';
+import 'package:study_dote/flash_cards/flash_main.dart';
+import 'package:study_dote/utils/urls.dart';
+import 'package:study_dote/utils/api_requests.dart';
+import 'package:study_dote/utils/my_prefs.dart';
 
-class FlashCardSample extends StatefulWidget {
+List<SubjectsDM> _subjects = [];
+
+ProgressDialog _pr;
+
+class LetsFlashCard extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     return _FlashCardState();
   }
 }
 
-class _FlashCardState extends State<FlashCardSample> {
-  List<int> indexes = [1, 2, 3, 4, 5];
-  List<String> values = ['English', 'Telugu', 'Maths', 'Science', 'Social'];
-  List<bool> selected = [false, false, false, false, false];
+class _FlashCardState extends State<LetsFlashCard> {
+  List<bool> _isSubjectSelected = [];
 
-  String _subjectIds = '';
+  _FlashCardState(){
+    _getSubjectsFromServer();
+  }
+
+  String _selectedSubjectsString = '';
 
   int screen_to_show = 0;
+  bool somethingChanged = false;
 
   Widget _getAppBar() {
     return AppBar(
-      title: Text('Flash Cards'),
+      title: Text('Select the subjects'),
       centerTitle: true,
     );
   }
 
+
   Widget _getBody() {
-    switch (screen_to_show) {
-      case 0:
-        return _letUserSelectTopics();
-      case 1:
-        return _seeFlashCards();
-      default:
-        return Container();
-    }
+     return FutureBuilder(
+         future: _getSubjectsFromServer(),
+         builder: (BuildContext context, AsyncSnapshot<List<SubjectsDM>> snapshot) {
+
+           if (snapshot.connectionState == ConnectionState.active ||
+               snapshot.connectionState == ConnectionState.done) {
+             if (snapshot.hasData) {
+               return _getTheCheckBoxes();
+             } else if (snapshot.hasError) {
+               return ShowProgressMen.errorRetrievingDataText;
+             } else {
+               return ShowProgressMen.centerProgress;
+             }
+           } else if (snapshot.connectionState == ConnectionState.waiting) {
+             if (snapshot.hasData) {
+               return _getTheCheckBoxes();
+             } else if (snapshot.hasError) {
+               return ShowProgressMen.errorRetrievingDataText;
+             } else {
+               return ShowProgressMen.centerProgress;
+             }
+           } else if (snapshot.connectionState == ConnectionState.none) {
+             return ShowProgressMen.noInternetText;
+           } else
+             return ShowProgressMen.errorRetrievingDataText;
+         }
+     );
   }
 
-  Widget _letUserSelectTopics() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Expanded(
-            flex: 1,
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width * 8 / 10,
-              child: ListView.builder(
-                  itemCount: indexes.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Card(
-                      child: SizedBox(
-                        width: MediaQuery.of(context).size.width * 9 / 10,
-                        height: 50.0,
-                        child: CheckboxListTile(
-                          value: selected[index],
-                          title: Text('${values[index]}'),
-                          selected: selected[index],
-                          onChanged: (bool isChecked) {
-                            setState(() {
-                              selected[index] = isChecked;
-                            });
-                            checkBoxSelectionChange(isChecked, index);
-                          },
-                        ),
-                      ),
-                    );
-                  }),
-            )),
-        Center(
-          child: RaisedButton(
-            onPressed: () {},
-            child: SizedBox(
-              height: 50.0,
-              child: Center(
-                child: Text(
-                  'Continue',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.white,fontSize: 18.0),
+  static bool isDataLoaded = false;
+
+  Widget _getTheCheckBoxes() {
+    if(isDataLoaded) {
+      Future.delayed(Duration(milliseconds: 1500)).then((value){
+        _pr.hide();
+      });
+      return ListView.builder(
+          itemCount: _subjects.length,
+          itemBuilder: (BuildContext context, int index) {
+            return Card(
+              child: SizedBox(
+                width: MediaQuery
+                    .of(context)
+                    .size
+                    .width * 9.5 / 10,
+                height: 50.0,
+                child: CheckboxListTile(
+                  value: _isSubjectSelected[index],
+                  title: Text('${_subjects[index].subName}'),
+                  selected: _isSubjectSelected[index],
+                  onChanged: (bool isChecked) {
+                    setState(() {
+                      _isSubjectSelected[index] = isChecked;
+                    //  print('$index $isChecked');
+                    });
+                  },
                 ),
               ),
-              width: MediaQuery.of(context).size.width * 8 / 10,
-            ),
-            color: Colors.blue,
-          ),
-        ),
-        SizedBox(height: 10.0,)
-      ],
-    );
-
-    /*
-    FutureBuilder(
-          future: _getTopics(),
-          builder: (BuildContext context, snapshot) {
-            return ListView.builder(
-                itemCount: indexes.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Card(
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width * 9 / 10,
-                      height: 50.0,
-                      child: CheckboxListTile(
-                        value: false,
-                        title: Text('${values[index]}'),
-                        selected: false,
-                        onChanged: (bool isChecked) {
-                          checkBoxSelectionChange(isChecked, index);
-                        },
-                      ),
-                    ),
-                  );
-                });
-          })
-    */
+            );
+          });
+    }else{
+      return Container();
+    }
   }
 
-  Widget _seeFlashCards() {
-    return SingleChildScrollView();
-  }
   //Processing methods
-  void checkBoxSelectionChange(bool isChecked, int index) {
-    _subjectIds = '';
-    for (int i = 0; i < values.length; i++) {
-      if (selected[i]) {
-        if (_subjectIds.isEmpty)
-          _subjectIds += '${values[i]}:${indexes[i]}';
+  void checkBoxSelectionChange() {
+    _selectedSubjectsString = '';
+    for (int i = 0; i < _subjects.length; i++) {
+      if (_isSubjectSelected[i]) {
+        if (_selectedSubjectsString.isEmpty)
+          _selectedSubjectsString += '${_subjects[i].id}';
         else
-          _subjectIds += ',${values[i]}:${indexes[i]}';
+          _selectedSubjectsString += ',${_subjects[i].id}';
       }
     }
-    print('the string is $_subjectIds');
+    print('the string is $_selectedSubjectsString');
+    Navigator.of(context).pushReplacement(CupertinoPageRoute(
+        builder: (BuildContext context) => FlashCardMain(_selectedSubjectsString)));
   }
 
   //Futures
-  Future<bool> _getTopics() async {
-    indexes = [1, 2, 3, 4, 5];
-    values = ['English', 'Telugu', 'Maths', 'Science', 'Social'];
+  Future<List<SubjectsDM>> _getSubjectsFromServer() async {
+    _subjects = [];
+    MyPrefs.getToken().then((String token) async {
+      var response = await get('https://api.studydote.com/subject',headers: {'accept': 'application/json',
+        'Authorization':'Bearer $token'},);
+      print(response.body);
+      if(response.body.contains('Unauthorized')){
+        ApiRequest.getAuthTokenAgain().then((String onValue){
+          _getSubjectsFromServer();
+        });
+      }else {
+        var jsonData = json.decode(response.body);
+        for (var p in jsonData) {
+          _isSubjectSelected.add(false);
+          SubjectsDM subject = SubjectsDM(
+              id: p['id'],
+              subName: p['subject_name']);
+          _subjects.add(subject);
+        }
+      }
+      setState(() {isDataLoaded = true;});
+      return _subjects;
+   });
   }
 
   @override
   Widget build(BuildContext context) {
+
+    _pr = new ProgressDialog(context);
+    _pr.setMessage("Loading...");
+    _pr.show();
+
     return Scaffold(
       appBar: _getAppBar(),
-      body: _getBody(),
+      body: _getTheCheckBoxes(),
+      bottomNavigationBar:RaisedButton(
+          onPressed: () {
+            checkBoxSelectionChange();
+          },
+          child: SizedBox(
+            height: 55.0,
+            child: Center(
+              child: Text(
+                'Continue',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white,fontSize: 18.0),
+              ),
+            ),
+            width: MediaQuery.of(context).size.width * 8 / 10,
+          ),
+          color: Colors.blue,
+        ),
     );
   }
 }

@@ -1,19 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:study_dote/home.dart';
+import 'package:study_dote/main/home.dart';
+import 'package:study_dote/registration/first_time_verification.dart';
 import 'package:study_dote/registration/login.dart';
 import 'package:study_dote/common/gradient_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:study_dote/common/progress_dialog.dart';
 import 'package:study_dote/scoped_model/scopedmodel.dart';
-import 'package:study_dote/utils/Urls.dart';
+import 'package:study_dote/utils/urls.dart';
 import 'package:study_dote/utils/my_prefs.dart';
 import 'package:http/http.dart';
 import 'dart:convert';
 import 'package:scoped_model/scoped_model.dart';
 
-ProgressDialog progressDialog;
+ProgressDialog _progressDialog;
 
 String _email, _password, _name, _phone;
 
@@ -35,12 +36,11 @@ final Shader linearGradient = LinearGradient(
 
 class _SignUpState extends State<SignUp> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     _context = context;
-    Size _size = MediaQuery
-        .of(context)
-        .size;
+    Size _size = MediaQuery.of(context).size;
     return ScopedModelDescendant(
       builder: (BuildContext context, Widget child, FlipScoppedModel model) {
         return GestureDetector(
@@ -54,8 +54,10 @@ class _SignUpState extends State<SignUp> {
               backgroundColor: Colors.white,
               body: ListView(children: [
                 Container(
-                  margin: EdgeInsets.fromLTRB(_size.width * 0.05,
-                      _size.width * 0.001, _size.width * 0.05,
+                  margin: EdgeInsets.fromLTRB(
+                      _size.width * 0.05,
+                      _size.width * 0.001,
+                      _size.width * 0.05,
                       _size.width * 0.001),
                   child: Column(
                     children: <Widget>[
@@ -72,8 +74,7 @@ class _SignUpState extends State<SignUp> {
                             style: new TextStyle(
                                 fontSize: _size.width * 0.08,
                                 fontWeight: FontWeight.bold,
-                                foreground: Paint()
-                                  ..shader = linearGradient),
+                                foreground: Paint()..shader = linearGradient),
                           ),
                         ),
                       ),
@@ -153,7 +154,9 @@ class _SignUpState extends State<SignUp> {
                           decoration: InputDecoration(
                             prefixIcon: Icon(Icons.lock),
                             suffixIcon: IconButton(
-                                icon: model.passwordstatus?Icon(Icons.visibility):Icon(Icons.visibility_off),
+                                icon: model.passwordstatus
+                                    ? Icon(Icons.visibility)
+                                    : Icon(Icons.visibility_off),
                                 onPressed: () {
                                   return model.ispasswordstatus();
                                 }),
@@ -203,14 +206,13 @@ class _SignUpState extends State<SignUp> {
                         children: <Widget>[
                           GradientButton(
                             onPressed: () {
-                              FocusScope.of(context).requestFocus(FocusNode());
                               if (_formKey.currentState.validate()) {
                                 _formKey.currentState.save();
-                                print(
-                                    'name:$_name,phone:$_phone,email:$_email,pass:$_password');
-                                register_User();
-                                FocusScope.of(context).requestFocus(
-                                    FocusNode());
+                                _progressDialog.show();
+                                //print('name:$_name,phone:$_phone,email:$_email,pass:$_password');
+                                _registerUserWithCredentials();
+                                FocusScope.of(context)
+                                    .requestFocus(FocusNode());
                               }
                             },
                             title: 'Register',
@@ -230,51 +232,50 @@ class _SignUpState extends State<SignUp> {
     );
   }
 
-  Future register_User() async {
-    //if( ! progressDialog.isShowing())
-    progressDialog.show();
+  Future _registerUserWithCredentials() async {
+    _progressDialog.show();
+
     var response = await post(Urls.register,
         body: {'full_name': _name, 'email': _email, 'password': _password});
     var jsonData = json.decode(response.body);
-    //if(progressDialog.isShowing())
+
     print('JSON data : ${jsonData.toString()}\nbody:${response.body}');
 
     var result = json.decode(response.body);
 
-    if (result['data'] != null) {
-      print(
-          'Data:\nName: ${result['data']['full_name']}\nEmail: ${result['data']['email']}\nPassword: ${result['data']['password']}\n');
+    await _progressDialog.hide();
+
+    if (result['id'] != null) {
+      Navigator.of(_context).pushReplacement(CupertinoPageRoute(
+          builder: (BuildContext context) => FirstTimeVerification(
+                email: _email,
+                name: _name,
+                pass: _password,
+                jsonS: result.toString(),
+              )));
+    } else if (result['data'] != null) {
       if (result['errors'] != null) {
         print('Errors:\nEmail: ${result['errors']['email']['msg']}');
+        Future.delayed(Duration(milliseconds: 500)).then((onValue) {
+          MessageBox(
+              _context, result['errors']['email']['msg'], 'SignUp Failed')
+              .show();
+        });
       }
-      //if (progressDialog.isShowing())
-      progressDialog.hide();
-      return;
-    }
-    else if (result['id'] != null) {
-      print('Id: ${result['id']}\n');
-      MyPrefs.setLoginDetails(
-          '${result['id']}', '${result['password']}', '${result['email']}')
-          .whenComplete(() {
-        //if(progressDialog.isShowing())
-        progressDialog.hide();
-        Navigator.of(_context).pushReplacement(CupertinoPageRoute(
-            builder: (BuildContext context) => Home()));
+    }else {
+      print('Can\'t register! Please try later');
+      if (_progressDialog.isShowing()) _progressDialog.hide();
+      Future.delayed(Duration(milliseconds: 200)).then((onValue) {
+        MessageBox(
+                _context,
+                'We are facing few troubles out there, please try later',
+                'SignUp Failed')
+            .show();
       });
-      return;
     }
-    else {
-      print('Error! Please try later');
-      if (progressDialog.isShowing())
-        progressDialog.hide();
-      return;
-    }
-    if (progressDialog.isShowing())
-      progressDialog.hide();
-//    print(response.body);
+    if (_progressDialog.isShowing()) _progressDialog.hide();
+       print(response.body);
   }
-
-
 }
 
 class BottomFacebookGoogle extends StatelessWidget {
@@ -288,13 +289,13 @@ class BottomFacebookGoogle extends StatelessWidget {
       print('signed out successful');
     });
     final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
-    final GoogleSignInAuthentication googleAuth = await googleUser
-        .authentication;
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser.authentication;
     final AuthCredential credential = GoogleAuthProvider.getCredential(
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
     );
-    if (!progressDialog.isShowing()) progressDialog.show();
+    if (!_progressDialog.isShowing()) _progressDialog.show();
     final FirebaseUser user = await _auth.signInWithCredential(credential);
     assert(user.email != null);
     assert(user.displayName != null);
@@ -303,85 +304,77 @@ class BottomFacebookGoogle extends StatelessWidget {
 
     final FirebaseUser currentUser = await _auth.currentUser();
     assert(user.uid == currentUser.uid);
-    print(' signInWithGoogle succeeded : ' + " " + user.email + " " +
-        user.displayName + " " + "  " + user.photoUrl + " " );
+    print(' signInWithGoogle succeeded : ' +
+        " " +
+        user.email +
+        " " +
+        user.displayName +
+        " " +
+        user.photoUrl +
+        " ");
 
     _name = user.displayName;
     _email = user.email;
     _phone = user.phoneNumber;
     _password = '';
 
-    //var response = await post(Urls.register, body: {'full_name': _name,'email': _email,'password': _password});
-    //var jsonData = json.decode(response.body);
-    //print('${jsonData.toString()}');
-
-    //post(Urls.register,encoding: JSONE );
-
-//    var response = await post(Urls.register, headers: {'full_name': user.displayName,'email': user.email,'password': _password});
-//    var jsonData = json.decode(response.body);
-//    print('JSON data : ${jsonData.toString()}\nbody:${response.body}');
-
-//    ApiRequest.register(_name, _email, _password).then((bool value){
-//      if(value){
-//         print('Signin Request done');
-//         MyPrefs.setUserLoggedIn();
-//         MyPrefs.setEmail(_email);
-//         MyPrefs.setPassword(_password);
-//
-//         if(progressDialog.isShowing()) progressDialog.hide();
-//         return 'signInWithGoogle succeeded: $user';
-//      }
-//    });
-
-//    if(progressDialog.isShowing()) progressDialog.hide();
-//Registration success
-    //{"id":2860,"email":"test@test.com","user_name":"test.1550380418","first_name":"test","last_name":"test"}
-//Registration failed
-    //{"data":{"full_name":"test test","email":"test@test.com","password":"Test123"},
-    // "errors":{"email":{"location":"body","param":"email","value":"test@test.com","msg":"Email already exists"}}}
     return 'signInWithGoogle succeeded: $user';
   }
 
-
-  Future register_User() async {
-    //if( ! progressDialog.isShowing())
-    progressDialog.show();
+  Future _registerUserWithGmail() async {
+    if (!_progressDialog.isShowing()) _progressDialog.show();
     var response = await post(Urls.register,
         body: {'full_name': _name, 'email': _email, 'password': _password});
     var jsonData = json.decode(response.body);
-    //if(progressDialog.isShowing())
+
     print('JSON data : ${jsonData.toString()}\nbody:${response.body}');
 
     var result = json.decode(response.body);
 
     if (result['data'] != null) {
+      if (_progressDialog.isShowing()) _progressDialog.hide();
       print(
           'Data:\nName: ${result['data']['full_name']}\nEmail: ${result['data']['email']}\nPassword: ${result['data']['password']}\n');
       if (result['errors'] != null) {
         print('Errors:\nEmail: ${result['errors']['email']['msg']}');
+        Future.delayed(Duration(milliseconds: 200)).then((onValue) {
+          MessageBox(
+                  _context, result['errors']['email']['msg'], 'SignUp Failed')
+              .show();
+        });
+      } else {
+        Future.delayed(Duration(milliseconds: 200)).then((onValue) {
+          MessageBox(
+                  _context,
+                  'We are facing few troubles out there, please try later',
+                  'SignUp Failed')
+              .show();
+        });
       }
-      if (progressDialog.isShowing())
-        progressDialog.hide();
     } else if (result['id'] != null) {
       print('Id: ${result['id']}\n');
       MyPrefs.setLoginDetails(
-          '${result['id']}', '${result['password']}', '${result['email']}')
+              '${result['id']}', '${result['password']}', '${result['email']}')
           .whenComplete(() {
-        if (progressDialog.isShowing())
-          progressDialog.hide();
-        Navigator.of(_context).pushReplacement(CupertinoPageRoute(
-            builder: (BuildContext context) => Home()));
+        if (_progressDialog.isShowing()) _progressDialog.hide();
+
+        Future.delayed(Duration(milliseconds: 500)).then((onValue) {
+          Navigator.of(_context).pushReplacement(
+              CupertinoPageRoute(builder: (BuildContext context) => Home()));
+        });
       });
     } else {
-      print('Error! Please try later');
-      if (progressDialog.isShowing())
-        progressDialog.hide();
+      print('Can\'t register! Please try later');
+      if (_progressDialog.isShowing()) _progressDialog.hide();
+      Future.delayed(Duration(milliseconds: 200)).then((onValue) {
+        MessageBox(
+                _context,
+                'We are facing few troubles out there, please try later',
+                'SignUp Failed')
+            .show();
+      });
     }
-    if (progressDialog.isShowing())
-      progressDialog.hide();
-//    print(response.body);
   }
-
 
   Widget _getSignUPLabel() {
     return Row(
@@ -403,8 +396,8 @@ class BottomFacebookGoogle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    progressDialog = new ProgressDialog(context);
-    progressDialog.setMessage('Please wait...');
+    _progressDialog = new ProgressDialog(context);
+    _progressDialog.setMessage('Please wait...');
     return Container(
       width: double.infinity,
       height: 170.0,
@@ -473,8 +466,7 @@ class BottomFacebookGoogle extends StatelessWidget {
                     'Login',
                     style: TextStyle(
                       fontSize: 15.0,
-                      foreground: Paint()
-                        ..shader = linearGradient,
+                      foreground: Paint()..shader = linearGradient,
                     ),
                   ),
                 ),

@@ -9,7 +9,7 @@ class FlipScoppedModel extends Model{
   bool isFront=true;
   bool pointerState = false;
   bool passwordstatus = false;
-
+  bool isBack= false;
   void ispasswordstatus(){
     passwordstatus=!passwordstatus;
     notifyListeners();

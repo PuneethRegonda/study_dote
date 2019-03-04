@@ -39,7 +39,7 @@ class ProgressDialog {
               child: Row(
                 children: <Widget>[
                   SizedBox(width: 10.0),
-                  CircularProgressIndicator(),
+                  Image.asset('assets/loader_new.gif',),
                   SizedBox(width: 20.0),
                   Text(
                     message,

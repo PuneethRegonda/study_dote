@@ -3,13 +3,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:study_dote/common/progress_dialog.dart';
-import 'package:study_dote/home.dart';
+import 'package:study_dote/main/home.dart';
 import 'package:study_dote/registration/signup.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:study_dote/common/gradient_button.dart';
 import 'package:study_dote/scoped_model/scopedmodel.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'package:study_dote/utils/Urls.dart';
+import 'package:study_dote/utils/urls.dart';
 import 'package:study_dote/utils/my_prefs.dart';
 
 String _email,_password;
@@ -187,13 +187,12 @@ class _LoginState extends State<Login> {
     );
 
     var jsonData = jsonDecode(response.body);
+    _pr.hide();
     if(jsonData['access_token']!=null){
       MyPrefs.setTokenLoginDetails('', _password, _email, jsonData['access_token'],jsonData['refresh_token']);
-      _pr.hide();
       Navigator.of(context).pushReplacement(CupertinoPageRoute(
           builder: (BuildContext context) => Home()));
     } else{
-      _pr.hide();
       new MessageBox(context, 'Sorry your login credentials are incorrect, please try again', 'Error').show();
     }
   }
