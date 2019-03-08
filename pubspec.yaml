@@ -26,7 +26,7 @@ dependencies:
   scoped_model: ^1.0.1
   cached_network_image: ^0.6.0+1
   universal_widget: ^1.2.5
-
+  #progress_dialog: ^1.0.3
 
 dev_dependencies:
   flutter_test:

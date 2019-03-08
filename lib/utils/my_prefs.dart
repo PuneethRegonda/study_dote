@@ -62,7 +62,7 @@ class MyPrefs {
   }
 
   static Future<bool> setToken(String token) async {
-    //preferences = await SharedPreferences.getInstance();
+    preferences = await SharedPreferences.getInstance();
     return preferences.setString('token', token);
   }
 

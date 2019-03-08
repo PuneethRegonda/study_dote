@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:study_dote/common/progress_dialog.dart';
 import 'package:study_dote/main/home.dart';
+import 'package:study_dote/registration/first_screen.dart';
 import 'package:study_dote/registration/signup.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:study_dote/common/gradient_button.dart';
@@ -11,9 +12,9 @@ import 'package:study_dote/scoped_model/scopedmodel.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:study_dote/utils/urls.dart';
 import 'package:study_dote/utils/my_prefs.dart';
+import 'package:universal_widget/universal_widget.dart';
 
 String _email,_password;
-ProgressDialog _pr;
 
 class Login extends StatefulWidget {
   @override
@@ -21,6 +22,18 @@ class Login extends StatefulWidget {
     return _LoginState();
   }
 }
+
+bool _shallIShowLinearBar = false;
+
+Widget _linear = UniversalWidget(
+    visible: _shallIShowLinearBar,
+    child: LinearProgressIndicator(
+        backgroundColor: Colors.deepOrangeAccent,
+        valueColor: new AlwaysStoppedAnimation<Color>(Colors.blueAccent)));
+
+Widget _linearProgress = PreferredSize(
+    child: _linear, preferredSize: Size(double.infinity, 1.0));
+
 
 final Shader linearGradient = LinearGradient(
   colors: [Color.fromRGBO(57, 160, 205, 1), Color.fromRGBO(5, 193, 154, 1)],
@@ -32,8 +45,6 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    _pr = new ProgressDialog(context);
-    _pr.setMessage('Signing you in...');
     _size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: () {
@@ -43,12 +54,28 @@ class _LoginState extends State<Login> {
     );
   }
 
+  Widget _getAppBar() {
+    return AppBar(
+      title: Text('Login'),
+      centerTitle: true,
+      leading: InkWell(
+        child: Icon(Icons.arrow_back),
+        onTap: () {
+          Navigator.of(context).pushReplacement(CupertinoPageRoute(
+              builder: (BuildContext context) => FirstScreen()));
+        },
+      ),
+      bottom: _linearProgress,
+    );
+  }
+
   Widget _getLoginForm() {
     return ScopedModelDescendant(
       builder: (BuildContext context, Widget child, FlipScoppedModel model) {
         return Form(
           key: _formKey,
           child: Scaffold(
+            appBar: _getAppBar(),
             bottomNavigationBar: BottomFacebookGoogle(),
             backgroundColor: Colors.white,
             body: ListView(children: [
@@ -57,24 +84,25 @@ class _LoginState extends State<Login> {
                     _size.width * 0.05, _size.width * 0.05, _size.width * 0.01),
                 child: Column(
                   children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.fromLTRB(
-                          _size.width * 0.03,
-                          _size.height * 0.1,
-                          _size.width * 0.03,
-                          _size.height * 0.1),
-                      child: Center(
-                        child: Text(
-                          'Login',
-                          style: new TextStyle(
-                              fontSize: _size.width * 0.08,
-                              fontWeight: FontWeight.bold,
-                              foreground: Paint()..shader = linearGradient),
-                        ),
-                      ),
-                    ),
+//                    Container(
+//                      padding: EdgeInsets.fromLTRB(
+//                          _size.width * 0.03,
+//                          _size.height * 0.1,
+//                          _size.width * 0.03,
+//                          _size.height * 0.1),
+//                      child: Center(
+//                        child: Text(
+//                          'Login',
+//                          style: new TextStyle(
+//                              fontSize: _size.width * 0.08,
+//                              fontWeight: FontWeight.bold,
+//                              foreground: Paint()..shader = linearGradient),
+//                        ),
+//                      ),
+//                    ),
                     Column(
                       children: <Widget>[
+                        SizedBox(height: 15.0,),
                         Container(
                           width: _size.width * 0.8,
                           child: TextFormField(
@@ -157,6 +185,7 @@ class _LoginState extends State<Login> {
                             ),
                           ],
                         ),
+                        FlatButton(onPressed: (){}, child: Text('Forgot password, reset here')),
                       ],
                     ),
                   ],
@@ -176,8 +205,11 @@ class _LoginState extends State<Login> {
    */
 
   Future _makeLoginRequest() async {
-    _pr.show();
-    print('$_email' + '$_password');
+    setState(() {
+      _shallIShowLinearBar = true;
+    });
+
+    print('Making login request with $_email' + '$_password');
 
     Map<String,String> headers = {'Content-Type':'application/json','Accept': 'application/json','authorization':'Basic c3R1ZHlkb3RlOnN0dWR5ZG90ZTEyMw=='};
 
@@ -187,7 +219,10 @@ class _LoginState extends State<Login> {
     );
 
     var jsonData = jsonDecode(response.body);
-    _pr.hide();
+    setState(() {
+      _shallIShowLinearBar = false;
+    });
+
     if(jsonData['access_token']!=null){
       MyPrefs.setTokenLoginDetails('', _password, _email, jsonData['access_token'],jsonData['refresh_token']);
       Navigator.of(context).pushReplacement(CupertinoPageRoute(
@@ -280,7 +315,7 @@ class BottomFacebookGoogle extends StatelessWidget {
                         builder: (BuildContext context) => SignUp()));
                   },
                   child: Text(
-                    'Signup With',
+                    'Signup',
                     style: TextStyle(
                       fontSize: 15.0,
 //                        color: Colors.black,

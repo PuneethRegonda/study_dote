@@ -1,57 +1,92 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
-class ProgressDialog {
+class ProgressDialog extends StatefulWidget {
+
+  _ProgressDialogState ps = new _ProgressDialogState();
+
+  void show(){
+    ps.setState((){
+      ps.opacity = 1.0;
+    });
+  }
+
+  void hide(){
+    ps.setState((){
+      ps.opacity = 0.0;
+    });
+  }
+
+  @override
+  State<StatefulWidget> createState() {
+    return ps;
+  }
+}
+
+class _ProgressDialogState extends State<ProgressDialog> {
   bool _isShowing = false;
 
-  BuildContext buildContext;
-  String message = "Loading...";
+  double opacity = 0.0;
 
-  ProgressDialog(this.buildContext);
+  String message = "Loading...";
 
   void setMessage(String mess) {
     this.message = mess;
   }
 
-  void show() {
-    _showDialog();
-    _isShowing = true;
-  }
+//  void show() {
+////    _showDialog();
+//    _isShowing = true;
+//  }
+//
+//  bool isShowing() {
+//    return _isShowing;
+//  }
+//
+//  void hide() {
+//    Navigator.pop(buildContext);
+//    _isShowing = false;
+//  }
 
-  bool isShowing() {
-    return _isShowing;
-  }
-
-  void hide() {
-    _isShowing = false;
-    Navigator.pop(buildContext);
-  }
-
-  Future _showDialog() {
-    showDialog(
-      context: buildContext,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return CupertinoAlertDialog(
-          content: SizedBox(
-            height: 45.0,
-            child: Center(
-              child: Row(
-                children: <Widget>[
-                  SizedBox(width: 10.0),
-                  Image.asset('assets/loader_new.gif',),
-                  SizedBox(width: 20.0),
-                  Text(
-                    message,
-                    style: TextStyle(color: Colors.black, fontSize: 20.0),
-                  )
-                ],
+  @override
+  Widget build(BuildContext context) {
+    return Opacity(
+      opacity: opacity,
+      child: Stack(
+        children: <Widget>[
+          CupertinoAlertDialog(
+            content: SizedBox(
+              height: 45.0,
+              child: Center(
+                child: Row(
+                  children: <Widget>[
+                    SizedBox(width: 5.0),
+                    Image.asset(
+                      'assets/loader.gif',
+                      height: double.infinity,
+                      fit: BoxFit.fitHeight,
+                    ),
+                    SizedBox(width: 10.0),
+                    Expanded(
+                      child: Text(
+                        message,
+                        style: TextStyle(color: Colors.black, fontSize: 20.0),
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
-          ),
-        );
-      },
+          )
+        ],
+      ),
     );
+  }
+}
+
+class _PDStateless extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
     return null;
   }
 }
@@ -60,9 +95,10 @@ class MessageBox {
   bool _isShowing = false;
 
   BuildContext buildContext;
-  String message = " ",title=" ";
+  String message = " ",
+      title = " ";
 
-  MessageBox(this.buildContext,this.message,this.title);
+  MessageBox(this.buildContext, this.message, this.title);
 
   void show() {
     _showDialog();
@@ -78,7 +114,7 @@ class MessageBox {
           actions: <Widget>[
             FlatButton(
               child: Text('Ok'),
-              onPressed: (){
+              onPressed: () {
                 Navigator.pop(buildContext);
               },
             )
@@ -89,10 +125,12 @@ class MessageBox {
               child: Row(
                 children: <Widget>[
                   SizedBox(width: 10.0),
-                  Text(
-                    message,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.black, fontSize: 18.0),
+                  Expanded(
+                    child: Text(
+                      message,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Colors.black, fontSize: 18.0),
+                    ),
                   ),
                   SizedBox(width: 10.0),
                 ],

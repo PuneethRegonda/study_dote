@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
@@ -14,7 +13,7 @@ import 'package:study_dote/utils/my_prefs.dart';
 
 List<SubjectsDM> _subjects = [];
 
-ProgressDialog _pr;
+//ProgressDialog _pr;
 
 class LetsFlashCard extends StatefulWidget {
   @override
@@ -78,7 +77,7 @@ class _FlashCardState extends State<LetsFlashCard> {
   Widget _getTheCheckBoxes() {
     if(isDataLoaded) {
       Future.delayed(Duration(milliseconds: 1500)).then((value){
-        _pr.hide();
+        //_pr.hide();
       });
       return ListView.builder(
           itemCount: _subjects.length,
@@ -154,9 +153,9 @@ class _FlashCardState extends State<LetsFlashCard> {
   @override
   Widget build(BuildContext context) {
 
-    _pr = new ProgressDialog(context);
-    _pr.setMessage("Loading...");
-    _pr.show();
+//    _pr = new ProgressDialog(context);
+//    _pr.setMessage("Loading...");
+//    _pr.show();
 
     return Scaffold(
       appBar: _getAppBar(),

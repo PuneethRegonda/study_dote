@@ -8,10 +8,8 @@ import 'package:study_dote/registration/signup.dart';
 import 'package:study_dote/utils/urls.dart';
 
 String _email, _name, _jsonString, _password;
-ProgressDialog _pr;
 
 class FirstTimeVerification extends StatefulWidget {
-
   FirstTimeVerification(
       {String email, String name, String jsonS, String pass}) {
     _email = email;
@@ -27,7 +25,6 @@ class FirstTimeVerification extends StatefulWidget {
 }
 
 class _FirstTimeVerificationState extends State<FirstTimeVerification> {
-
   String _code = '';
   var fkey = GlobalKey<FormState>();
 
@@ -52,7 +49,7 @@ class _FirstTimeVerificationState extends State<FirstTimeVerification> {
           height: 50.0,
         ),
         SizedBox(
-          width: MediaQuery.of(context).size.width * 6 / 10,
+          width: MediaQuery.of(context).size.width * 8 / 10,
           child: Center(
             child: Form(
               key: fkey,
@@ -63,15 +60,15 @@ class _FirstTimeVerificationState extends State<FirstTimeVerification> {
                 ),
                 maxLength: 9,
                 textAlign: TextAlign.center,
+                keyboardType: TextInputType.number,
                 validator: (String val) {
                   if (val.length != 9) {
                     return 'Invalid OTP';
                   }
                 },
-                onSaved: (String onVal) {
+                onSaved: (String onVal) async {
                   _code = onVal;
-                  _pr.show();
-                  _verifyUser();
+                  await _verifyUser();
                 },
               ),
             ),
@@ -80,25 +77,25 @@ class _FirstTimeVerificationState extends State<FirstTimeVerification> {
         SizedBox(
           height: 20.0,
         ),
-        CupertinoButton(
-          child: SizedBox(
-            height: MediaQuery.of(context).size.width*9/10,
-            child: Text('Submit'),
+        SizedBox(
+          width: MediaQuery.of(context).size.width * 8 / 10,
+          child: CupertinoButton(
+            child: Text(
+              'Submit',
+              textAlign: TextAlign.center,
+            ),
+            onPressed: () {
+              if (fkey.currentState.validate()) fkey.currentState.save();
+            },
+            color: Colors.blue,
           ),
-          onPressed: () {
-            if(fkey.currentState.validate())
-              fkey.currentState.save();
-
-          },
-          color: Colors.blue,
         ),
         SizedBox(
           height: 20.0,
         ),
         InkWell(
           child: Text('Didn\'t recieve email, click here to resend'),
-          onTap: (){
-            _pr.show();
+          onTap: () {
             _resendMail();
           },
         )
@@ -107,35 +104,27 @@ class _FirstTimeVerificationState extends State<FirstTimeVerification> {
   }
 
   Future _resendMail() async {
-
-    var response = await get(Urls.resendCode+'?email=$_email');
+    var response = await get(Urls.resendCode + '?email=$_email');
     var jsonData = json.decode(response.body);
 
     print(jsonData);
-
-    _pr.hide();
   }
 
-
   Future _verifyUser() async {
-
-    var response = await get(Urls.verifyUser+'?code=$_code');
+    var response = await get(Urls.verifyUser + '?code=$_code');
     var jsonData = json.decode(response.body);
 
     print(jsonData);
 
-    _pr.hide();
   }
 
   @override
   Widget build(BuildContext context) {
-    _pr = new ProgressDialog(context);
-    _pr.setMessage('Verifying...');
 
     return Scaffold(
       appBar: _getAppBar(),
       body: SingleChildScrollView(
-        child: _getBody(),
+        child: Center(child: _getBody(),),
       ),
     );
   }

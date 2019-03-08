@@ -56,7 +56,7 @@ class FirstScreenState extends State<FirstScreen>
   Widget _getBottomSheet(){
     return Column(
       children: <Widget>[
-      GradientButton(
+      _GradientButton(
         onPressed: () {
           Navigator.of(context).push(CupertinoPageRoute(
               builder: (BuildContext context) => SignUp()));
@@ -69,7 +69,7 @@ class FirstScreenState extends State<FirstScreen>
       SizedBox(
         height: 10.0,
       ),
-      GradientButton(
+      _GradientButton(
         onPressed: () {
           Navigator.of(context).push(CupertinoPageRoute(
               builder: (BuildContext context) => Login()));
@@ -98,16 +98,6 @@ class BodyLayOut extends StatelessWidget {
 
     return Column(
       children: <Widget>[
-//        Container(
-//          decoration: BoxDecoration(
-//            borderRadius: BorderRadius.circular(10.0),
-//            image: DecorationImage(
-//                image: AssetImage('assets/first_screen.png'),
-//                fit: BoxFit.fitHeight),
-//          ),
-//          height: height*3.5/10,
-//          width: width*9/10,
-//        ),
         SizedBox(
           height: 300.0,
           child: Stack(
@@ -134,7 +124,7 @@ class BodyLayOut extends StatelessWidget {
         Expanded(
           child: SizedBox(),
         ),
-        GradientButton(
+        _GradientButton(
           onPressed: () {
             Navigator.of(context).push(CupertinoPageRoute(
                 builder: (BuildContext context) => SignUp()));
@@ -147,7 +137,7 @@ class BodyLayOut extends StatelessWidget {
         SizedBox(
           height: 25.0,
         ),
-        GradientButton(
+        _GradientButton(
           onPressed: () {
             Navigator.of(context).push(CupertinoPageRoute(
                 builder: (BuildContext context) => Login()));
@@ -165,8 +155,8 @@ class BodyLayOut extends StatelessWidget {
   }
 }
 
-class GradientButton extends StatelessWidget {
-  const GradientButton(
+class _GradientButton extends StatelessWidget {
+  const _GradientButton(
       {Key key,
         @required this.onPressed,
         @required this.title,
