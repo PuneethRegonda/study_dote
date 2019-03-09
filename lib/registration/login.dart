@@ -220,6 +220,8 @@ class _LoginState extends State<Login> {
       body: jsonEncode({"grant_type":"password","username":_email,"password":_password,"scope":"offline_access"}),
     );
 
+    print(response.body);
+
     var jsonData = jsonDecode(response.body);
     setState(() {
       _shallIShowLinearBar = false;

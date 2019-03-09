@@ -165,17 +165,16 @@ class _FlashCardState extends State<LetsFlashCard> {
         var jsonData = json.decode(response.body);
         for (var p in jsonData) {
 
-          String question = p['questions'].toString().substring(3, p['questions'].toString().length-4);
+          //String question = p['questions'].toString().substring(3, p['questions'].toString().length-4);
 
-          String answer = p['answer'].toString().substring(3, p['answer'].toString().length-4);
-
+          //String answer = p['answer'].toString().substring(3, p['answer'].toString().length-4);
 
           FlashCardDM subject = FlashCardDM(
               id: p['id'],
               subjectId: p['subject_id'],
               headerTitle: p['header_title'],
-              question: question,
-              answer: answer,
+              question: p['questions'],
+              answer: p['answer'],
               answerPlain: p['answer_plain'],
               questionPlain: p['questions_plain']
           );

@@ -230,7 +230,8 @@ class _SignUpState extends State<SignUp> {
                             title: 'Register',
                             width: _size.width * 0.8,
                             height: _size.height * 0.078,
-                          )
+                          ),
+                          SizedBox(height: 20.0,)
                         ],
                       ),
                     ],
@@ -458,7 +459,7 @@ class BottomFacebookGoogle extends StatelessWidget {
                 Text('Already have an account?  '),
                 InkWell(
                   onTap: () {
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    Navigator.of(context).pushReplacement(CupertinoPageRoute(
                         builder: (BuildContext context) => Login()));
                   },
                   child: Text(

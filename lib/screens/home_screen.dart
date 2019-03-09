@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:study_dote/flash_cards/flash_card_select_topics.dart';
+import 'package:study_dote/screens//user_profile_settings.dart';
 import 'package:study_dote/scoped_model/scopedmodel.dart';
 import 'package:study_dote/screens/dashboard_body.dart';
 import 'package:study_dote/screens/why_us.dart';
@@ -128,7 +129,12 @@ class Home extends StatelessWidget {
                     'Settings',
                     style: _listTileTextStyle,
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).push(CupertinoPageRoute(
+                        builder: (BuildContext context) => Setting()));
+
+                  },
                 ),
               ],
             ),
@@ -148,6 +154,10 @@ Widget getBottomNavBar() {
     type: BottomNavigationBarType.fixed,
     items: [
       BottomNavigationBarItem(
+          activeIcon: ImageIcon(
+            AssetImage('assets/menu_icons/nav_bar_icons/home_white.png'),
+            color: Colors.blue,
+          ),
           icon: ImageIcon(
             AssetImage('assets/menu_icons/nav_bar_icons/home_white.png'),
             color: Colors.black,

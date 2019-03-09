@@ -11,7 +11,6 @@ import 'package:study_dote/registration/signup.dart';
 import 'package:study_dote/scoped_model/scopedmodel.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:study_dote/main/splash_screen.dart';
-import 'package:study_dote/main/user_profile_settings.dart';
 import 'package:study_dote/screens/home_screen.dart';
 import 'package:study_dote/utils/my_prefs.dart';
 import 'package:study_dote/utils/urls.dart';

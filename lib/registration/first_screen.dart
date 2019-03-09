@@ -73,7 +73,7 @@ class FirstScreenState extends State<FirstScreen>
       ),
       _GradientButton(
         onPressed: () {
-          Navigator.of(context).push(CupertinoPageRoute(
+          Navigator.of(context).pushReplacement(CupertinoPageRoute(
               builder: (BuildContext context) => Login()));
         },
         title: 'Login',
@@ -129,7 +129,7 @@ class BodyLayOut extends StatelessWidget {
         _GradientButton(
           onPressed: () {
             //new MessageBox(context,'Hello','Welcome').show();
-            Navigator.of(context).push(CupertinoPageRoute(
+            Navigator.of(context).pushReplacement(CupertinoPageRoute(
                 builder: (BuildContext context) => SignUp()));
           },
           title: ' Signup ',
@@ -142,7 +142,7 @@ class BodyLayOut extends StatelessWidget {
         ),
         _GradientButton(
           onPressed: () {
-            Navigator.of(context).push(CupertinoPageRoute(
+            Navigator.of(context).pushReplacement(CupertinoPageRoute(
                 builder: (BuildContext context) => Login()));
           },
           title: 'Login',

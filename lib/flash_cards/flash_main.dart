@@ -377,6 +377,21 @@ class _FlashCardsState extends State<FlashCards>
     );
   }
 
+  Widget _getAppBar() {
+    return AppBar(
+      title: Text('Flash Cards'),
+      centerTitle: true,
+      backgroundColor: Color.fromRGBO(5, 193, 154, 1),
+      leading: InkWell(
+        child: Icon(Icons.keyboard_arrow_left),
+        onTap: () {
+          Navigator.of(context).pop();
+        },
+      ),
+    //  bottom: _linearProgress,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     _height = MediaQuery.of(context).size.height;
@@ -384,10 +399,7 @@ class _FlashCardsState extends State<FlashCards>
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        appBar: AppBar(
-          title: Text('Flash Cards'),
-          centerTitle: true,
-        ),
+        appBar:_getAppBar(),
         body: Stack(
           children: <Widget>[
             AnimationCard(
