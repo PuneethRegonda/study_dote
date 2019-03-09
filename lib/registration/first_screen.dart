@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:study_dote/common/progress_dialog.dart';
 import 'login.dart';
 import 'signup.dart';
 
@@ -58,8 +59,9 @@ class FirstScreenState extends State<FirstScreen>
       children: <Widget>[
       _GradientButton(
         onPressed: () {
-          Navigator.of(context).push(CupertinoPageRoute(
-              builder: (BuildContext context) => SignUp()));
+
+//          Navigator.of(context).push(CupertinoPageRoute(
+//              builder: (BuildContext context) => SignUp()));
         },
         title: ' Signup ',
         width: _width*8/10,
@@ -126,6 +128,7 @@ class BodyLayOut extends StatelessWidget {
         ),
         _GradientButton(
           onPressed: () {
+            //new MessageBox(context,'Hello','Welcome').show();
             Navigator.of(context).push(CupertinoPageRoute(
                 builder: (BuildContext context) => SignUp()));
           },

@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:study_dote/main/home.dart';
 import 'package:study_dote/registration/first_screen.dart';
 import 'package:study_dote/registration/first_time_verification.dart';
 import 'package:study_dote/registration/login.dart';
@@ -9,14 +8,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:study_dote/common/progress_dialog.dart';
 import 'package:study_dote/scoped_model/scopedmodel.dart';
+import 'package:study_dote/screens/home_screen.dart';
 import 'package:study_dote/utils/urls.dart';
 import 'package:study_dote/utils/my_prefs.dart';
 import 'package:http/http.dart';
 import 'dart:convert';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:universal_widget/universal_widget.dart';
-
-ProgressDialog _progressDialog;
 
 String _email, _password, _name, _phone;
 
@@ -28,6 +26,15 @@ final Shader linearGradient = LinearGradient(
   colors: [Color.fromRGBO(57, 160, 205, 1), Color.fromRGBO(5, 193, 154, 1)],
 ).createShader(Rect.fromLTWH(0.0, 0.0, 300.0, 70.0));
 
+UniversalWidget _linear = UniversalWidget(
+    visible: false,
+    child: LinearProgressIndicator(
+        backgroundColor: Colors.deepOrangeAccent,
+        valueColor: new AlwaysStoppedAnimation<Color>(Colors.blueAccent)));
+
+Widget _linearProgress = PreferredSize(
+    child: _linear, preferredSize: Size(double.infinity, 1.0));
+
 class SignUp extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -38,35 +45,25 @@ class SignUp extends StatefulWidget {
 class _SignUpState extends State<SignUp> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  bool _shallIShowLinearBar = false;
+  Widget _getAppBar() {
+    return AppBar(
+      title: Text('Study Dote'),
+      centerTitle: true,
+      backgroundColor: Color.fromRGBO(5, 193, 154, 1),
+      leading: InkWell(
+        child: Icon(Icons.keyboard_arrow_left),
+        onTap: () {
+          Navigator.of(context).pushReplacement(CupertinoPageRoute(
+              builder: (BuildContext context) => FirstScreen()));
+        },
+      ),
+      bottom: _linearProgress,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     _context = context;
-
-    Widget _linear = UniversalWidget(
-        visible: _shallIShowLinearBar,
-        child: LinearProgressIndicator(
-            backgroundColor: Colors.deepOrangeAccent,
-            valueColor: new AlwaysStoppedAnimation<Color>(Colors.blueAccent)));
-
-    Widget _linearProgress = PreferredSize(
-        child: _linear, preferredSize: Size(double.infinity, 1.0));
-
-    Widget _getAppBar() {
-      return AppBar(
-        title: Text('Signup'),
-        centerTitle: true,
-        leading: InkWell(
-          child: Icon(Icons.arrow_back),
-          onTap: () {
-            Navigator.of(context).pushReplacement(CupertinoPageRoute(
-                builder: (BuildContext context) => FirstScreen()));
-          },
-        ),
-        bottom: _linearProgress,
-      );
-    }
 
     Size _size = MediaQuery.of(context).size;
     return ScopedModelDescendant(
@@ -90,7 +87,9 @@ class _SignUpState extends State<SignUp> {
                       _size.width * 0.001),
                   child: Column(
                     children: <Widget>[
-                      SizedBox(height: 15.0,),
+                      SizedBox(height: 20.0,),
+                      Text('Signup',textAlign: TextAlign.center,style: TextStyle(color: Colors.blue[300],fontWeight: FontWeight.w900,fontSize: 32.0,),),
+                      SizedBox(height: 30.0,),
                       Container(
                         width: _size.width * 0.9,
                         child: TextFormField(
@@ -246,9 +245,7 @@ class _SignUpState extends State<SignUp> {
   }
 
   Future _registerUserWithCredentials() async {
-    setState(() {
-      _shallIShowLinearBar = true;
-    });
+    _linear.update(visible: true);
 
     await post(Urls.register,
             body: {'full_name': _name, 'email': _email, 'password': _password})
@@ -256,11 +253,8 @@ class _SignUpState extends State<SignUp> {
       var result = json.decode(response.body);
 
       print(response.body);
-      setState(() {
-        _shallIShowLinearBar = false;
-      });
+      _linear.update(visible: false);
       if (result['id'] != null) {
-        print('entered into first if');
         Navigator.of(context).pushReplacement(CupertinoPageRoute(
             builder: (BuildContext context) => FirstTimeVerification(
                   email: _email,

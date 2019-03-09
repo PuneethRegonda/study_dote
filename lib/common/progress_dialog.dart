@@ -115,7 +115,7 @@ class MessageBox {
             FlatButton(
               child: Text('Ok'),
               onPressed: () {
-                Navigator.pop(buildContext);
+                Navigator.of(context).pop();
               },
             )
           ],

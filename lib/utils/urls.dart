@@ -6,7 +6,9 @@ class Urls{
         getToken = _root + 'auth/token',
         getSubjects = _root+'subject',
         verifyUser = _root + 'student/verify',
-        resendCode = _root + 'student/resendCode';
+        resendCode = _root + 'student/resendCode',
+        getFlashCards = _root + 'flashcard',
+        forgotPassword = _root+'student/forgotPassword';
 
 
 

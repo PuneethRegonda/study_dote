@@ -1,6 +1,5 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:study_dote/common/gradient_button.dart';
 
 void main() {
   runApp(MyApp());
@@ -13,8 +12,6 @@ TextStyle questionStyle = new TextStyle(
 TextStyle answerStyle = new TextStyle(
     color: Colors.black, fontSize: 20.0, fontWeight: FontWeight.w600);
 
-//String _front = 'This is front of ${counter + 1}',
-//    _back = 'This is back of ${counter + 1}';
 
 class MyApp extends StatelessWidget {
 //  static bool isFront = true;
@@ -22,31 +19,25 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: MyHomePage(),
+      home: FlashCards(),
       debugShowCheckedModeBanner: false,
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
+class FlashCards extends StatefulWidget {
   final int speed = 500;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _FlashCardsState createState() => _FlashCardsState();
 }
 
-class _MyHomePageState extends State<MyHomePage>
+class _FlashCardsState extends State<FlashCards>
     with SingleTickerProviderStateMixin {
   AnimationController controller;
   Animation<double> _frontRotation;
   Animation<double> _backRotation;
   int counter = 0;
-
-  void updatecard() {
-    setState(() {
-      counter = counter++;
-    });
-  }
 
   @override
   void initState() {
@@ -82,32 +73,6 @@ class _MyHomePageState extends State<MyHomePage>
   }
 
   bool isBack = false;
-
-  ///
-  ///
-  /// i didnt  use the [FlipCard]
-  /// bez one file is enough for flip
-  /// as u asked .  :)
-  ///
-  ///
-  ///
-
-//  FlipCard thing = new FlipCard(
-//      front: Card(
-//    elevation: 5.0,
-//    shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(4.0))),
-//    child: SizedBox(
-//      height: 250.0,
-//      width: 250.0,
-//      child: Text('soome'),
-//    ),
-//  ),
-//      back: Center(
-//        child: Text(
-//          '$_back',
-//          style: TextStyle(fontSize: 24.0),
-//        ),
-//      ));
 
   Widget backModel() {
     return Column(
@@ -233,7 +198,6 @@ class _MyHomePageState extends State<MyHomePage>
                                 isBack = !isBack;
                               });
                             }
-//                                print('count of card');
                           },
                         ),
                         SizedBox(
@@ -251,52 +215,12 @@ class _MyHomePageState extends State<MyHomePage>
     );
   }
 
-  /*
-  Column(
-        children: <Widget>[
-          GradientButton(
-            title: 'Show Answer',
-            height: 50.0,
-            width: MediaQuery.of(context).size.width * 7.5 / 10,
-            onPressed: () {
-              if (!isBack) {
-                controller.forward();
-                setState(() {
-                  isBack = !isBack;
-                });
-              } else {
-                controller.reverse();
-                setState(() {
-                  isBack = !isBack;
-                });
-              }
-//                                print('count of card');
-            },
-          ),
-          SizedBox(
-            height: 30.0,
-          ),
-        ],
-      )
-   */
 
   Widget showFrontOptions() {
     return SizedBox(
       height: 65.0,
       child: Column(
         children: <Widget>[
-//          GradientButton(
-//              onPressed: () {
-//                setState(() {
-//                  print('counter is $counter');
-//                  counter=counter+1;
-//                  print('counter updated to $counter');
-//                });
-//                print('showNextQuestion');
-//              },
-//              title: 'Next Question',
-//              width: MediaQuery.of(context).size.width * .9,
-//              height: 50.0),
           SizedBox(
             height: 15.0,
           )
@@ -311,6 +235,8 @@ class _MyHomePageState extends State<MyHomePage>
       child: Column(
         children: <Widget>[
           GradientButton(
+              gradient: LinearGradient(
+                  colors: [Color.fromRGBO(59, 158, 207, 1), Color.fromRGBO(4, 193, 153, 1)]),
               onPressed: () {
                 print('i know counter is $counter');
                 controller.reverse();
@@ -318,7 +244,7 @@ class _MyHomePageState extends State<MyHomePage>
                   setState(() {
                     isBack = !isBack;
                     print('counter is $counter');
-                    counter = counter + 1;
+                    counter = (++counter)%carddata.length;
                     print('counter updated to $counter');
                   });
                 });
@@ -330,6 +256,8 @@ class _MyHomePageState extends State<MyHomePage>
             height: 15.0,
           ),
           GradientButton(
+              gradient: LinearGradient(
+                  colors: [Color.fromRGBO(241, 111, 111, 1), Color.fromRGBO(196, 60, 60, 1)]),
               onPressed: () {
                 print('i know counter is $counter');
                 controller.reverse();
@@ -337,7 +265,7 @@ class _MyHomePageState extends State<MyHomePage>
                   setState(() {
                     isBack = !isBack;
                     print('counter is $counter');
-                    counter = counter + 1;
+                    counter = (++counter)%carddata.length;
                     print('counter updated to $counter');
                   });
                 });
@@ -357,7 +285,8 @@ class _MyHomePageState extends State<MyHomePage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Flip it dude'),
+        title: Text('Flash Cards'),
+        centerTitle: true,
       ),
       body: Stack(
         children: <Widget>[
@@ -367,11 +296,6 @@ class _MyHomePageState extends State<MyHomePage>
             direction: FlipDirection.HORIZONTAL,
           ),
 
-          ///as to over come the bug  used the [AbsorbPointer]
-          ///to know what is bug set absorbing to flase and
-          ///click on the in middel  of the answer card
-          ///
-          ///
           AnimationCard(
             animation: _frontRotation,
             child: AbsorbPointer(
@@ -421,17 +345,50 @@ class AnimationCard extends StatelessWidget {
   }
 }
 
-///
-/// int is for id
-///
-/// dynamic is for map of Map<String , String >
-///
-
 Map<int, dynamic> carddata = {
   0: {'t': 'Topic1', 'q': 'Question1', 'a': 'Answer1'},
   1: {'t': 'Topic2', 'q': 'Question2', 'a': 'Answer2'},
-  2: {'t': 'Topic2', 'q': 'Question3', 'a': 'Answer3'},
-  3: {'t': 'Topic2', 'q': 'Question4', 'a': 'Answer4'},
+  2: {'t': 'Topic3', 'q': 'Question3', 'a': 'Answer3'},
+  3: {'t': 'Topic4', 'q': 'Question4', 'a': 'Answer4'},
 };
 
-//print('${carddata[counter]['Q'] }');
+
+class GradientButton extends StatelessWidget {
+
+  const GradientButton({
+    Key key,
+    @required this.onPressed,
+    @required this.gradient,
+    @required this.title,
+    @required this.width,
+    @required this.height
+  }) : super(key: key);
+
+  final  Function onPressed;
+  final String title;
+  final double width;
+  final double height;
+  final LinearGradient gradient;
+  @override
+  Widget build(BuildContext context) {
+    return RawMaterialButton(
+      splashColor: Color.fromRGBO(5, 193, 154, 1),
+      onPressed: onPressed,
+      child: Container(
+        child: Center(child:
+        Text(title,style: TextStyle(
+            fontSize: 20.0,
+            color: Colors.white
+        ),)),
+        width: width,
+        height: height,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(30.0),
+            shape: BoxShape.rectangle,
+            gradient: gradient
+        ),
+
+      ),
+    );
+  }
+}

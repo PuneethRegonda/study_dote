@@ -26,6 +26,7 @@ dependencies:
   scoped_model: ^1.0.1
   cached_network_image: ^0.6.0+1
   universal_widget: ^1.2.5
+  html: ^0.13.4+1
   #progress_dialog: ^1.0.3
 
 dev_dependencies:
@@ -66,6 +67,25 @@ flutter:
     - assets/study_dote_fs.png
     - assets/doc_with_tab_fs.png
     - assets/person.png
+    - assets/menu_icons/subscribe.png
+    - assets/menu_icons/close.png
+    - assets/menu_icons/nav_bar_icons/home_white.png
+    - assets/menu_icons/nav_bar_icons/qbank.png
+    - assets/menu_icons/nav_bar_icons/testseries.png
+    - assets/menu_icons/nav_bar_icons/statistics.png
+    - assets/drawer_assets/blogs.png
+    - assets/drawer_assets/contact.png
+    - assets/drawer_assets/dashboard.png
+    - assets/drawer_assets/flash_card.png
+    - assets/drawer_assets/invite.png
+    - assets/drawer_assets/menu.png
+    - assets/drawer_assets/mock_exam.png
+    - assets/drawer_assets/settings.png
+    - assets/drawer_assets/tagged.png
+    - assets/drawer_assets/why_us.png
+    - assets/why_us/gropu_book.png
+    - assets/why_us/tick.png
+    - assets/why_us/group_setting.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.

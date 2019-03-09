@@ -3,13 +3,15 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:study_dote/common/progress_dialog.dart';
-import 'package:study_dote/main/home.dart';
+
 import 'package:study_dote/registration/first_screen.dart';
+import 'package:study_dote/registration/reset_password.dart';
 import 'package:study_dote/registration/signup.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:study_dote/common/gradient_button.dart';
 import 'package:study_dote/scoped_model/scopedmodel.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:study_dote/screens/home_screen.dart';
 import 'package:study_dote/utils/urls.dart';
 import 'package:study_dote/utils/my_prefs.dart';
 import 'package:universal_widget/universal_widget.dart';
@@ -23,9 +25,11 @@ class Login extends StatefulWidget {
   }
 }
 
+bool _iNeedPassword = true;
+
 bool _shallIShowLinearBar = false;
 
-Widget _linear = UniversalWidget(
+UniversalWidget _linear = UniversalWidget(
     visible: _shallIShowLinearBar,
     child: LinearProgressIndicator(
         backgroundColor: Colors.deepOrangeAccent,
@@ -56,10 +60,11 @@ class _LoginState extends State<Login> {
 
   Widget _getAppBar() {
     return AppBar(
-      title: Text('Login'),
+      title: Text('Study Dote'),
       centerTitle: true,
+      backgroundColor: Color.fromRGBO(5, 193, 154, 1),
       leading: InkWell(
-        child: Icon(Icons.arrow_back),
+        child: Icon(Icons.keyboard_arrow_left),
         onTap: () {
           Navigator.of(context).pushReplacement(CupertinoPageRoute(
               builder: (BuildContext context) => FirstScreen()));
@@ -84,22 +89,9 @@ class _LoginState extends State<Login> {
                     _size.width * 0.05, _size.width * 0.05, _size.width * 0.01),
                 child: Column(
                   children: <Widget>[
-//                    Container(
-//                      padding: EdgeInsets.fromLTRB(
-//                          _size.width * 0.03,
-//                          _size.height * 0.1,
-//                          _size.width * 0.03,
-//                          _size.height * 0.1),
-//                      child: Center(
-//                        child: Text(
-//                          'Login',
-//                          style: new TextStyle(
-//                              fontSize: _size.width * 0.08,
-//                              fontWeight: FontWeight.bold,
-//                              foreground: Paint()..shader = linearGradient),
-//                        ),
-//                      ),
-//                    ),
+                    SizedBox(height: 20.0,),
+                    Text('Login',textAlign: TextAlign.center,style: TextStyle(color: Colors.blue[300],fontWeight: FontWeight.w900,fontSize: 32.0,),),
+                    SizedBox(height: 30.0,),
                     Column(
                       children: <Widget>[
                         SizedBox(height: 15.0,),
@@ -135,10 +127,14 @@ class _LoginState extends State<Login> {
                           width: _size.width * 0.8,
                           child: TextFormField(
                             validator: (String pass) {
-                              if (pass.length > 6)
-                                return null;
+                              if(_iNeedPassword) {
+                                if (pass.length > 6)
+                                  return null;
+                                else
+                                  return 'Password must be 6 characters long';
+                              }
                               else
-                                return 'Password must be 6 characters long';
+                                return null;
                             },
                             onSaved: (String value) {
                               setState(() {
@@ -172,6 +168,7 @@ class _LoginState extends State<Login> {
                           children: <Widget>[
                             GradientButton(
                               onPressed: () {
+                                _iNeedPassword = true;
                                 if (_formKey.currentState.validate()) {
                                   FocusScope.of(context)
                                       .requestFocus(FocusNode());
@@ -185,7 +182,10 @@ class _LoginState extends State<Login> {
                             ),
                           ],
                         ),
-                        FlatButton(onPressed: (){}, child: Text('Forgot password, reset here')),
+                        FlatButton(onPressed: (){
+                          Navigator.of(context).pushReplacement(CupertinoPageRoute(
+                              builder: (BuildContext context) => ResetPassword()));
+                        }, child: Text('Forgot password, reset here')),
                       ],
                     ),
                   ],
@@ -197,6 +197,8 @@ class _LoginState extends State<Login> {
       },
     );
   }
+
+
 
   /*
   {"access_token":"DQAnZaXoBkSK7ALxS2ESnuPEK3ybEGVCuq3ptIAYhPg16l9rT9jfNOAOQhLGQuSu3xt0j1lwa4T0u0YKDdo2eKw5xNvwS8YEf5yXmjSPsM0C2swHCcM7SVXvJj23bUrJx5xMBFOjCSGCwhLc8P3d6QB8ZfY0yQBUOSESsVvD3QyV9Fjm48kKHmRBT2JLesxILn2SItVSGEtxjYYAYqDamfRPdYlGnTnysGpsRHJTndrGeWqY5zRDbgBk3Hc6owh",
