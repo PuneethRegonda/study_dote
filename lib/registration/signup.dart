@@ -265,7 +265,7 @@ class _SignUpState extends State<SignUp> {
                 )));
       } else if (result['data'] != null) {
         if (result['errors'] != null) {
-          MessageBox(_context, 'Error: ' + result.toString(), 'SignUp Failed')
+          MessageBox(_context, 'Error: ' + result['errors']['email']['msg'].toString(), 'SignUp Failed')
               .show();
         }
       } else {
@@ -456,7 +456,7 @@ class BottomFacebookGoogle extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Text('Already have an account?  '),
+                Text('Already have an account?'),
                 InkWell(
                   onTap: () {
                     Navigator.of(context).pushReplacement(CupertinoPageRoute(

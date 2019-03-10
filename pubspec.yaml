@@ -28,6 +28,7 @@ dependencies:
   universal_widget: ^1.2.5
   html: ^0.13.4+1
   #progress_dialog: ^1.0.3
+  folding_widget: ^0.0.1
 
 dev_dependencies:
   flutter_test:
