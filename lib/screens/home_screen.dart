@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -7,6 +9,7 @@ import 'package:study_dote/scoped_model/scopedmodel.dart';
 import 'package:study_dote/screens/dashboard_body.dart';
 import 'package:study_dote/screens/why_us.dart';
 import 'package:study_dote/screens/custom_app_bar.dart';
+import "package:share/share.dart";
 
 class Home extends StatelessWidget {
 
@@ -99,8 +102,9 @@ class Home extends StatelessWidget {
                     style: _listTileTextStyle,
                   ),
                   onTap: () {
-//                     Navigator.of(context).push(CupertinoPageRoute(
-//                         builder: (BuildContext context) => FlashCardMain()));
+                    Navigator.of(context).pop();
+                    Share.share(
+                        "Check out The History of Everything! " + (Platform.isAndroid ? "https://play.google.com/store/apps/details?id=com.twodimensions.timeline" : "itms://itunes.apple.com/us/app/apple-store/id1441257460?mt=8"));
                   },
                 ),
                 ListTile(

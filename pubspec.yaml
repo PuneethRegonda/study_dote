@@ -29,6 +29,7 @@ dependencies:
   html: ^0.13.4+1
   #progress_dialog: ^1.0.3
   folding_widget: ^0.0.1
+  share: ^0.5.3
 
 dev_dependencies:
   flutter_test:
